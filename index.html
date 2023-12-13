@@ -12,14 +12,18 @@
   <form>
     <label for="billId">ID do Título:</label>
     <input type="text" id="billId" name="billId" required>
-    <button type="button" onclick="buscarAPI()">Buscar</button>
+    <button type="button" onclick="buscarEEnviarParaAPIs()">Buscar</button>
   </form>
 
   <div id="resultado"></div>
 
   <script>
-    function buscarAPI() {
+    function buscarEEnviarParaAPIs() {
       var billId = document.getElementById('billId').value;
+      buscarAPI(billId);
+    }
+
+    function buscarAPI(billId) {
       var url = 'http://localhost:3000/api/bills/' + billId;
 
       // Fazer uma chamada à API usando fetch com 'no-cors'
