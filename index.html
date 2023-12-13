@@ -12,23 +12,15 @@
         if (!response.ok) {
           throw new Error('Erro na chamada da API Sienge: ' + response.status);
         }
-        return response.text();
+        return response.json();
       })
       .then(data => {
-        try {
-          // Tenta converter a resposta para JSON
-          var jsonData = JSON.parse(data);
-          exibirResultado(jsonData);
-          enviarParaMilvus(jsonData);
-        } catch (error) {
-          // Se houver um erro ao converter para JSON, assume que a resposta é um texto simples
-          exibirResultado(data);
-          enviarParaMilvus({ chamado_descricao: data });
-        }
+        exibirResultado(data);
+        enviarParaMilvus(data);
       })
       .catch(error => {
-        console.error('Erro na chamada da API Sienge:', error);
-        exibirResultadoError();
+        console.error('Erro na chamada da API Sienge:', error.message);
+        exibirResultadoError('Erro ao chamar a API Sienge.');
       });
   }
 
@@ -37,9 +29,9 @@
     resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
   }
 
-  function exibirResultadoError() {
+  function exibirResultadoError(message) {
     var resultadoElemento = document.getElementById('resultado');
-    resultadoElemento.innerHTML = "<p>Ocorreu um erro ao chamar a API Sienge.</p>";
+    resultadoElemento.innerHTML = "<p>" + message + "</p>";
   }
 
   function enviarParaMilvus(data) {
