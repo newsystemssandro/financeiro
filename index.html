@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consulta e Envio para API</title>
+  <title>Consulta e Envio para Milvus</title>
 </head>
 <body>
 
-  <h1>Consulta e Envio para API</h1>
+  <h1>Consulta e Envio para Milvus</h1>
 
   <form>
     <label for="billId">ID do Título:</label>
@@ -20,57 +20,51 @@
   <script>
     async function buscarEEnviarParaAPIs() {
       var billId = document.getElementById('billId').value;
-      var url = 'http://localhost:3000/api/bills/' + billId;
+      var siengeUrl = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
+      var milvusUrl = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
 
+      // Consulta a API do Sienge
       try {
-        const response = await fetch(url);
-        const data = await response.json();
-        exibirResultado(data);
-        await enviarParaMilvus(data);
+        const response = await fetch(siengeUrl);
+        const siengeData = await response.json();
+        exibirResultado(siengeData);
+
+        // Envia para a API do Milvus
+        const milvusResponse = await fetch(milvusUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k'
+          },
+          body: JSON.stringify({
+            "cliente_id": "CL4RYB",
+            "chamado_assunto": "verde",
+            "chamado_descricao": "Teste2",
+            "chamado_email": "sandro.silva@ebm.com.br",
+            "chamado_telefone": "(11) 1234-1234",
+            "chamado_contato": "Teste",
+            "chamado_tecnico": "sandro.silva@ebm.com.br",
+            "chamado_mesa": "SUPORTE N2",
+            "Setor do Solicitante": "EA3",
+            "chamado_categoria_primaria": "E-MAIL",
+            "chamado_categoria_secundaria": "Criar",
+            "Unidade de Negócio": "Computador Lento",
+            "Empresa": "Computador Lento"
+          })
+        });
+
+        // Verifica a resposta da API do Milvus
+        const milvusData = await milvusResponse.json();
+        console.log('Resposta da API do Milvus:', milvusData);
+
       } catch (error) {
-        console.error('Erro geral na chamada da API:', error);
+        console.error('Erro na chamada da API Sienge:', error);
       }
     }
 
     function exibirResultado(data) {
       var resultadoElemento = document.getElementById('resultado');
       resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-    }
-
-    async function enviarParaMilvus(data) {
-      var milvusUrl = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
-      var milvusToken = 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k';  // Substitua pelo seu token
-
-      // Use os dados recebidos do Sienege para preencher os campos obrigatórios do Milvus
-      var milvusData = {
-        "cliente_id": "ABC123",
-        "chamado_assunto": "Teste",
-        "chamado_descricao": "Teste",
-        "chamado_email": "teste@milvus.com.br",
-        "chamado_telefone": "(11) 1234-1234",
-        "chamado_contato": "Teste",
-        "chamado_tecnico": "teste@teste.com.br",
-        "chamado_mesa": "Mesa padrão",
-        "chamado_setor": "Setor padrão",
-        "chamado_categoria_primaria": "Backup",
-        "chamado_categoria_secundaria": "Verificar"
-      };
-
-      try {
-        const milvusResponse = await fetch(milvusUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + milvusToken
-          },
-          body: JSON.stringify(milvusData)
-        });
-
-        const milvusResult = await milvusResponse.json();
-        console.log('Resposta da API do Milvus:', milvusResult);
-      } catch (error) {
-        console.error('Erro ao enviar para a API do Milvus:', error);
-      }
     }
   </script>
 
