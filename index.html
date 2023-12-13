@@ -1,95 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consulta API</title>
-</head>
-<body>
+<script>
+  function buscarEEnviarParaAPIs() {
+    var billId = document.getElementById('billId').value;
+    buscarAPI(billId);
+  }
 
-  <h1>Consulta API</h1>
+  function buscarAPI(billId) {
+    var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
 
-  <form>
-    <label for="billId">ID do Título:</label>
-    <input type="text" id="billId" name="billId" required>
-    <button type="button" onclick="buscarEEnviarParaAPIs()">Buscar</button>
-  </form>
-
-  <div id="resultado"></div>
-
-  <script>
-    function buscarEEnviarParaAPIs() {
-      var billId = document.getElementById('billId').value;
-      buscarAPI(billId);
-    }
-
-    function buscarAPI(billId) {
-      var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
-
-      fetch(urlSienge)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erro na chamada da API Sienge: ' + response.status);
-          }
-          return response.json();
-        })
-        .then(data => {
-          exibirResultado(data);
-
-          // Adicionar lógica para enviar dados para Milvus quando a resposta da API Sienge for obtida
-          enviarParaMilvus(data);
-        })
-        .catch(error => {
-          console.error('Erro na chamada da API Sienge:', error);
-          exibirResultadoError();
-        });
-    }
-
-    function exibirResultado(data) {
-      var resultadoElemento = document.getElementById('resultado');
-      if (data) {
-        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-      } else {
-        resultadoElemento.innerHTML = "<p>A resposta da API Sienge está vazia ou não é um JSON válido.</p>";
-      }
-    }
-
-    function exibirResultadoError() {
-      var resultadoElemento = document.getElementById('resultado');
-      resultadoElemento.innerHTML = "<p>Ocorreu um erro ao chamar a API Sienge.</p>";
-    }
-
-    function enviarParaMilvus(data) {
-      // Modifique esta parte para criar um objeto com os dados necessários para a API Milvus
-      var milvusData = {
-        cliente_id: "CL4RYB",
-        chamado_assunto: "verde",
-        chamado_descricao: JSON.stringify(data),
-        chamado_email: "sandro.silva@ebm.com.br",
-        chamado_telefone: "(11) 1234-1234",
-        chamado_contato: "Teste",
-        chamado_tecnico: "sandro.silva@ebm.com.br",
-        chamado_mesa: "SUPORTE N2",
-        Setor_do_Solicitante: "EA3",
-        chamado_categoria_primaria: "E-MAIL",
-        chamado_categoria_secundaria: "Criar",
-        Unidade_de_Negócio: "Computador Lento",
-        Empresa: "Computador Lento"
-      };
-
-      // Enviar dados para o servidor intermediário (substitua pela URL do seu servidor)
-      fetch('http://localhost:3000/api/enviarParaMilvus', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(milvusData),
+    fetch(urlSienge)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro na chamada da API Sienge: ' + response.status);
+        }
+        return response.text();
       })
-        .then(response => response.json())
-        .then(milvusResponse => console.log('Resposta do Milvus:', milvusResponse))
-        .catch(error => console.error('Erro ao enviar dados para Milvus:', error));
-    }
-  </script>
+      .then(data => {
+        try {
+          // Tenta converter a resposta para JSON
+          var jsonData = JSON.parse(data);
+          exibirResultado(jsonData);
+          enviarParaMilvus(jsonData);
+        } catch (error) {
+          // Se houver um erro ao converter para JSON, assume que a resposta é um texto simples
+          exibirResultado(data);
+          enviarParaMilvus({ chamado_descricao: data });
+        }
+      })
+      .catch(error => {
+        console.error('Erro na chamada da API Sienge:', error);
+        exibirResultadoError();
+      });
+  }
 
-</body>
-</html>
+  function exibirResultado(data) {
+    var resultadoElemento = document.getElementById('resultado');
+    resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+  }
+
+  function exibirResultadoError() {
+    var resultadoElemento = document.getElementById('resultado');
+    resultadoElemento.innerHTML = "<p>Ocorreu um erro ao chamar a API Sienge.</p>";
+  }
+
+  function enviarParaMilvus(data) {
+    // Restante do código para enviar para a API Milvus
+    // ...
+  }
+</script>
