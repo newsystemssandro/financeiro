@@ -18,24 +18,34 @@
   <div id="resultado"></div>
 
   <script>
-    function buscarAPI() {
-      // Obter o valor do campo de entrada
-      var billId = document.getElementById('billId').value;
+    // Função para obter parâmetros da URL
+    function obterParametroURL(nome) {
+      var urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(nome);
+    }
 
-      // Construir a URL da API com o billId
+    // Preencher o campo billId se estiver presente na URL
+    var billIdDaURL = obterParametroURL('billId');
+    if (billIdDaURL) {
+      document.getElementById('billId').value = billIdDaURL;
+      buscarAPI(); // Se houver um billId na URL, realizar a busca automaticamente
+    }
+
+    // Função para buscar a API
+    function buscarAPI() {
+      var billId = document.getElementById('billId').value;
       var url = `https://ebm-api:7C4FHs824Prr@api.sienge.com.br/ebm/public/api/v1/bills/${billId}`;
 
-      // Fazer uma chamada à API usando fetch
       fetch(url)
         .then(response => response.json())
         .then(data => exibirResultado(data))
         .catch(error => console.error('Erro na chamada da API:', error));
     }
 
+    // Função para exibir resultado
     function exibirResultado(data) {
-      // Exibir o resultado no elemento com id 'resultado'
       var resultadoElemento = document.getElementById('resultado');
-      resultadoElemento.innerHTML = JSON.stringify(data, null, 2);
+      resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
     }
   </script>
 
