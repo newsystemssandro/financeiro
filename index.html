@@ -21,15 +21,10 @@
     // Função para buscar a API
     function buscarAPI() {
       var billId = document.getElementById('billId').value;
-      var url = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
+      var url = 'https://thingproxy.freeboard.io/fetch/https://ebm-api:7C4FHs824Prr@api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
 
       // Fazer uma chamada à API usando fetch
-      fetch(url, { 
-        method: 'GET',
-        headers: {
-          'Authorization': 'Basic ' + btoa('ebm-api:7C4FHs824Prr')
-        }
-      })
+      fetch(url)
         .then(response => response.json())
         .then(data => exibirResultado(data))
         .catch(error => console.error('Erro na chamada da API:', error));
