@@ -54,3 +54,16 @@ async function enviarParaMilvus(dataSienge) {
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+console.log('Enviando dados para Milvus:', dadosMilvus);
+
+const response = await fetch(urlMilvus, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': tokenMilvus,
+  },
+  body: JSON.stringify(dadosMilvus),
+});
+
+console.log('Resposta da API Milvus:', response);
+
