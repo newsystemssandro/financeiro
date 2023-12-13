@@ -20,6 +20,7 @@
   <script>
     async function enviarParaMilvus(data) {
       try {
+        console.log('Antes da chamada para a API do Milvus');
         var dadosMilvus = {
           "cliente_id": "CL4RYB",
           "chamado_assunto": "verde",
@@ -47,6 +48,8 @@
           },
           body: JSON.stringify(dadosMilvus),
         });
+
+        console.log('Depois da chamada para a API do Milvus');
 
         if (!response.ok) {
           throw new Error('Erro na chamada da API Milvus: ' + response.status);
