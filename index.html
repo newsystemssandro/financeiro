@@ -18,27 +18,24 @@
   <div id="resultado"></div>
 
   <script>
-  async function enviarParaMilvus(data) {
+ async function enviarParaMilvus(data) {
   try {
-    // Verificar se documentNumber e chamado_assunto estão presentes na resposta da API do Sienge
-    if ('documentNumber' in data) {
-      // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
-      var dadosMilvus = {
-        "cliente_id": "CL4RYB",
-        "chamado_assunto": data.documentNumber, // Usar o valor de documentNumber como chamado_assunto da API do Sienge
-        "chamado_descricao": JSON.stringify(data),
-        // ... outras propriedades ...
-      };
+    // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
+    var dadosMilvus = {
+      "cliente_id": "CL4RYB",
+      "chamado_assunto": data.documentNumber, // Usar o valor de documentNumber como chamado_assunto da API do Sienge
+      "chamado_descricao": JSON.stringify(data),
+      "id": data.id, // Usar o valor de id como id da API do Sienge
+      // ... outras propriedades ...
+    };
 
-      // Restante do código permanece inalterado
-      // ...
-    } else {
-      console.error('A propriedade documentNumber não está presente na resposta da API do Sienge.');
-    }
+    // Restante do código permanece inalterado
+    // ...
   } catch (error) {
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+
 
 
     // Função para enviar dados para a API do Milvus
