@@ -21,25 +21,19 @@
     // Função para buscar a API
     function buscarAPI() {
       var billId = document.getElementById('billId').value;
-      var url = `https://api.sienge.com.br/ebm/public/api/v1/bills/${billId}`;
+      var url = 'https://cors-anywhere.herokuapp.com/https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
 
-      // Fazer uma chamada à API usando fetch com mode 'no-cors'
-      fetch(url, { 
-        method: 'GET',
-        mode: 'no-cors',
-        headers: {
-          'Authorization': 'Basic ' + btoa('ebm-api:7C4FHs824Prr')
-        }
-      })
-      .then(response => response.text())
-      .then(data => exibirResultado(data))
-      .catch(error => console.error('Erro na chamada da API:', error));
+      // Fazer uma chamada à API usando fetch
+      fetch(url)
+        .then(response => response.json())
+        .then(data => exibirResultado(data))
+        .catch(error => console.error('Erro na chamada da API:', error));
     }
 
     // Função para exibir resultado
     function exibirResultado(data) {
       var resultadoElemento = document.getElementById('resultado');
-      resultadoElemento.innerHTML = "<pre>" + data + "</pre>";
+      resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
     }
   </script>
 
