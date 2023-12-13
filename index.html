@@ -110,10 +110,18 @@ function buscarEEnviarParaAPIs() {
     })
     .then(data => {
       console.log(data);
-      enviarParaMilvus(data);
+
+      // Verificar se a propriedade desejada está presente na resposta da API Sienge
+      if (data && data.propriedade_desejada !== undefined) {
+        // Chamar a função enviarParaMilvus apenas se a propriedade desejada estiver presente
+        enviarParaMilvus(data);
+      } else {
+        console.error('A propriedade desejada não está presente na resposta da API Sienge.');
+      }
     })
     .catch(error => console.error('Erro na chamada da API Sienge:', error));
 }
+
 
 async function enviarParaMilvus(data) {
   try {
