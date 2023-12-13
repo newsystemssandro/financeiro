@@ -18,43 +18,31 @@
   <div id="resultado"></div>
 
   <script>
-    async function enviarParaMilvus(data) {
-  try {
-    // Extrair o documentNumber da resposta da API do Sienge
-    const documentNumber = data.documentNumber;
+    async function buscarEEnviarParaAPIs() {
+      try {
+        var billId = document.getElementById('billId').value;
+        var urlSienge = 'http://localhost:3000/api/bills/' + billId;
 
-    // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
-    const dadosMilvus = {
-      cliente_id: "CL4RYB",
-      chamado_assunto: documentNumber, // Usar o documentNumber como chamado_assunto
-      chamado_descricao: JSON.stringify(data),
-      // ... outras propriedades ...
-    };
+        const response = await fetch(urlSienge);
 
-    // Configurar a chamada à API do Milvus
-    const urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
-    const tokenMilvus = 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k';
+        if (!response.ok) {
+          throw new Error('Erro na chamada da API Sienge: ' + response.status);
+        }
 
-    const response = await fetch(urlMilvus, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': tokenMilvus,
-      },
-      body: JSON.stringify(dadosMilvus),
-    });
+        const data = await response.json();
+        console.log(data);
 
-    if (!response.ok) {
-      throw new Error('Erro na chamada da API Milvus: ' + response.status);
+        // Adicione aqui a lógica para manipular os dados da API Sienge
+        enviarParaMilvus(data);
+
+        // Exibindo o resultado na página (você pode ajustar conforme necessário)
+        var resultadoElemento = document.getElementById('resultado');
+        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+
+      } catch (error) {
+        console.error('Erro na chamada da API Sienge:', error);
+      }
     }
-
-    const result = await response.json();
-    console.log('Resposta da API Milvus:', result);
-  } catch (error) {
-    console.error('Erro na chamada da API Milvus:', error);
-  }
-}
-
 
     // Função para enviar dados para a API do Milvus
     async function enviarParaMilvus(data) {
