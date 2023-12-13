@@ -99,6 +99,11 @@ async function enviarParaMilvus(data) {
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+.then(data => {
+  exibirResultado(data);
+  enviarParaMilvus(data);
+})
+
 
   </script>
 
