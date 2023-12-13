@@ -62,11 +62,16 @@
     }
 
     function prepararDadosParaMilvus(data) {
-      // Substitua com a lógica para extrair as informações desejadas da resposta da API Sienge
+      // Verificar e preencher campos obrigatórios
       const milvusData = {
         cliente_id: "CL4RYB",
-        chamado_assunto: data.algumaPropriedade,  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_descricao: data.outraPropriedade,  // Substitua com a propriedade correta da resposta da API Sienge
+        chamado_assunto: data.algumaPropriedade || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
+        chamado_descricao: data.outraPropriedade || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
+        chamado_email: data.email || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
+        chamado_telefone: data.telefone || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
+        chamado_contato: data.contato || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
+        chamado_tecnico: data.tecnico || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
+        chamado_mesa: data.mesa || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
         // ... outras propriedades
       };
 
@@ -75,27 +80,13 @@
 
     async function enviarParaMilvus(milvusData) {
       try {
-        // Enviar dados para Milvus usando fetch
-        const milvusResponse = await fetch('https://apiintegracao.milvus.com.br/api/chamado/criar', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k',
-          },
-          body: JSON.stringify(milvusData),
-        });
-
-        if (!milvusResponse.ok) {
-          throw new Error(`Erro ao enviar dados para Milvus: ${milvusResponse.status} - ${milvusResponse.statusText}`);
+        // Verificar se todos os campos obrigatórios estão preenchidos
+        const camposObrigatorios = ['chamado_assunto', 'chamado_descricao', 'chamado_email', 'chamado_telefone', 'chamado_contato', 'chamado_tecnico', 'chamado_mesa'];
+        for (const campo of camposObrigatorios) {
+          if (!milvusData[campo]) {
+            throw new Error(`Campo obrigatório não preenchido: ${campo}`);
+          }
         }
 
-        const milvusResponseBody = await milvusResponse.json();
-        console.log('Resposta do Milvus:', milvusResponseBody);
-      } catch (error) {
-        console.error('Erro ao enviar dados para Milvus:', error.message);
-      }
-    }
-  </script>
-
-</body>
-</html>
+        // Enviar dados para Milvus usando fetch
+        const milvusResponse = await
