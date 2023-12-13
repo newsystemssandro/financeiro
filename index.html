@@ -39,26 +39,49 @@
       resultadoElemento.innerHTML = "<pre>" + data + "</pre>";
     }
 
-    function enviarParaMilvus(data) {
-      // Modifique esta parte para criar um objeto com os dados necessários para a API Milvus
-      var milvusData = {
-        cliente_id: "CL4RYB",
-        chamado_assunto: "verde",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_descricao: "Teste",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_email: "sandro.silva@ebm.com.br",
-        chamado_telefone: "(11) 1234-1234",
-        chamado_contato: "Teste",
-        chamado_tecnico: "sandro.silva@ebm.com.br",
-        chamado_mesa: "SUPORTE N2",
-        Setor_do_Solicitante: "EA3",
-        chamado_categoria_primaria: "E-MAIL",
-        chamado_categoria_secundaria: "Criar",
-        Unidade_de_Negócio: "Computador Lento",
-        Empresa: "Computador Lento"
-      
+   function enviarParaMilvus(data) {
+  try {
+    // Extrair a propriedade desejada da resposta da API Sienge (ajuste conforme a estrutura real)
+    var chamadoDescricao = data.propriedade_desejada; // Substitua "propriedade_desejada" pelo nome correto
 
+    // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
+    var dadosMilvus = {
+      cliente_id: "CL4RYB",
+      chamado_assunto: "verde",
+      chamado_descricao: chamadoDescricao,
+      chamado_email: "sandro.silva@ebm.com.br",
+      chamado_telefone: "(11) 1234-1234",
+      chamado_contato: "Teste",
+      chamado_tecnico: "sandro.silva@ebm.com.br",
+      chamado_mesa: "SUPORTE N2",
+      Setor_do_Solicitante: "EA3",
+      chamado_categoria_primaria: "E-MAIL",
+      chamado_categoria_secundaria: "Criar",
+      Unidade_de_Negócio: "Computador Lento",
+      Empresa: "Computador Lento"
+    };
 
-      };
+    // Configurar a chamada à API do Milvus
+    var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
+    var tokenMilvus = 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k';
+
+    // Enviar dados para Milvus usando fetch
+    fetch(urlMilvus, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': tokenMilvus,
+      },
+      body: JSON.stringify(dadosMilvus),
+    })
+    .then(response => response.json())
+    .then(milvusResponse => console.log('Resposta do Milvus:', milvusResponse))
+    .catch(error => console.error('Erro ao enviar dados para Milvus:', error));
+  } catch (error) {
+    console.error('Erro na chamada da API Milvus:', error);
+  }
+}
+
 
       // Enviar dados para Milvus usando fetch
       fetch('https://apiintegracao.milvus.com.br/api/chamado/criar', {
