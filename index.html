@@ -31,7 +31,7 @@
         .then(response => response.text()) // converter para texto devido ao 'no-cors'
         .then(data => {
           exibirResultado(data);
-          
+
           // Adicionar lógica para enviar dados para Milvus quando a resposta da API Sienge for obtida
           enviarParaMilvus(data);
         })
@@ -41,26 +41,38 @@
     function exibirResultado(data) {
       var resultadoElemento = document.getElementById('resultado');
       resultadoElemento.innerHTML = "<pre>" + data + "</pre>";
+
+      try {
+        // Tentar converter a resposta da API Sienge para JSON
+        var dataObj = JSON.parse(data);
+
+        // Se a conversão for bem-sucedida, atualizar a chamado_descricao com a resposta real
+        if (dataObj && dataObj.chamado_descricao) {
+          var milvusData = {
+            cliente_id: "CL4RYB",
+            chamado_assunto: "verde",
+            chamado_descricao: dataObj.chamado_descricao,
+            chamado_email: "sandro.silva@ebm.com.br",
+            chamado_telefone: "(11) 1234-1234",
+            chamado_contato: "Teste",
+            chamado_tecnico: "sandro.silva@ebm.com.br",
+            chamado_mesa: "SUPORTE N2",
+            Setor_do_Solicitante: "EA3",
+            chamado_categoria_primaria: "E-MAIL",
+            chamado_categoria_secundaria: "Criar",
+            Unidade_de_Negócio: "Computador Lento",
+            Empresa: "Computador Lento"
+          };
+
+          // Enviar dados para Milvus usando fetch
+          enviarParaMilvus(milvusData);
+        }
+      } catch (error) {
+        console.error('Erro ao processar resposta da API Sienge:', error);
+      }
     }
 
     function enviarParaMilvus(data) {
-      // Modifique esta parte para criar um objeto com os dados necessários para a API Milvus
-      var milvusData = {
-        cliente_id: "CL4RYB",
-        chamado_assunto: "verde",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_descricao: "Teste",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_email: "sandro.silva@ebm.com.br",
-        chamado_telefone: "(11) 1234-1234",
-        chamado_contato: "Teste",
-        chamado_tecnico: "sandro.silva@ebm.com.br",
-        chamado_mesa: "SUPORTE N2",
-        Setor_do_Solicitante: "EA3",
-        chamado_categoria_primaria: "E-MAIL",
-        chamado_categoria_secundaria: "Criar",
-        Unidade_de_Negócio: "Computador Lento",
-        Empresa: "Computador Lento"
-      };
-
       // Enviar dados para Milvus usando fetch
       fetch('https://apiintegracao.milvus.com.br/api/chamado/criar', {
         method: 'POST',
@@ -68,7 +80,7 @@
           'Content-Type': 'application/json',
           'Authorization': 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k',
         },
-        body: JSON.stringify(milvusData),
+        body: JSON.stringify(data),
       })
         .then(response => response.json())
         .then(milvusResponse => console.log('Resposta do Milvus:', milvusResponse))
