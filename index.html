@@ -23,36 +23,12 @@
       var url = 'http://localhost:3000/api/bills/' + billId;
 
       try {
-        // Fazer uma chamada à API Sienge usando fetch com 'no-cors'
-        const response = await fetch(url, { mode: 'no-cors' });
-
-        if (!response.ok) {
-          throw new Error(`Erro na chamada da API Sienge: ${response.status} - ${response.statusText}`);
-        }
-
-        const textData = await response.text();
-
-        // Tentar analisar como JSON
-        let data;
-        try {
-          data = JSON.parse(textData);
-        } catch (jsonError) {
-          console.error('Erro ao analisar a resposta da API Sienge como JSON:', jsonError.message);
-          console.log('Resposta da API Sienge (como texto):', textData);
-          return;
-        }
-
-        // Exibir resultado da API Sienge
+        const response = await fetch(url);
+        const data = await response.json();
         exibirResultado(data);
-
-        // Preparar dados para a API Milvus
-        const milvusData = prepararDadosParaMilvus(data);
-
-        // Enviar dados para a API Milvus
-        await enviarParaMilvus(milvusData);
+        await enviarParaMilvus(data);
       } catch (error) {
-        console.error('Erro geral na chamada da API:', error.message);
-        console.log('Detalhes adicionais da resposta da API Sienge:', textData);
+        console.error('Erro geral na chamada da API:', error);
       }
     }
 
@@ -61,52 +37,41 @@
       resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
     }
 
-    function prepararDadosParaMilvus(data) {
-      // Verificar e preencher campos obrigatórios
-      const milvusData = {
-        cliente_id: "CL4RYB",
-        chamado_assunto: data.algumaPropriedade || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_descricao: data.outraPropriedade || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_email: data.email || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_telefone: data.telefone || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_contato: data.contato || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_tecnico: data.tecnico || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
-        chamado_mesa: data.mesa || "Valor Padrão",  // Substitua com a propriedade correta da resposta da API Sienge
-        // ... outras propriedades
+    async function enviarParaMilvus(data) {
+      var milvusUrl = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
+      var milvusToken = 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k';  // Substitua pelo seu token
+
+      // Use os dados recebidos do Sienege para preencher os campos obrigatórios do Milvus
+      var milvusData = {
+        "cliente_id": "CL4RYB",
+        "chamado_assunto": "verde",
+        "chamado_descricao": "Teste2",
+        "chamado_email": "sandro.silva@ebm.com.br",
+        "chamado_telefone": "(11) 1234-1234",
+        "chamado_contato": "Teste",
+        "chamado_tecnico": "sandro.silva@ebm.com.br",
+        "chamado_mesa": "SUPORTE N2",
+        "Setor do Solicitante": "EA3",
+        "chamado_categoria_primaria": "E-MAIL",
+        "chamado_categoria_secundaria": "Criar",
+        "Unidade de Negócio": "Computador Lento",
+        "Empresa": "Computador Lento"
       };
 
-      return milvusData;
-    }
-
-    async function enviarParaMilvus(milvusData) {
       try {
-        // Verificar se todos os campos obrigatórios estão preenchidos
-        const camposObrigatorios = ['chamado_assunto', 'chamado_descricao', 'chamado_email', 'chamado_telefone', 'chamado_contato', 'chamado_tecnico', 'chamado_mesa'];
-        for (const campo of camposObrigatorios) {
-          if (!milvusData[campo]) {
-            throw new Error(`Campo obrigatório não preenchido: ${campo}`);
-          }
-        }
-
-        // Enviar dados para Milvus usando fetch
-        const milvusResponse = await fetch('https://apiintegracao.milvus.com.br/api/chamado/criar', {
+        const milvusResponse = await fetch(milvusUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k',
+            'Authorization': 'Bearer ' + milvusToken
           },
-          body: JSON.stringify(milvusData),
+          body: JSON.stringify(milvusData)
         });
 
-        if (!milvusResponse.ok) {
-          throw new Error(`Erro na chamada da API Milvus: ${milvusResponse.status} - ${milvusResponse.statusText}`);
-        }
-
-        const milvusTextData = await milvusResponse.text();
-
-        console.log('Resposta da API Milvus:', milvusTextData);
+        const milvusResult = await milvusResponse.json();
+        console.log('Resposta da API do Milvus:', milvusResult);
       } catch (error) {
-        console.error('Erro ao enviar para a API Milvus:', error.message);
+        console.error('Erro ao enviar para a API do Milvus:', error);
       }
     }
   </script>
