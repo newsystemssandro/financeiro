@@ -46,37 +46,27 @@
 
     // Função para enviar dados para a API do Milvus
     async function enviarParaMilvus(data) {
-      try {
-        var dadosMilvus = {
-          "cliente_id": "CL4RYB",
-          "chamado_assunto": data.documentNumber,
-          "chamado_descricao": JSON.stringify(data),
-          // ... outras propriedades ...
-        };
+  try {
+    // Verificar se documentNumber e chamado_assunto estão presentes na resposta da API do Sienge
+    if ('documentNumber' in data && 'chamado_assunto' in data) {
+      // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
+      var dadosMilvus = {
+        "cliente_id": "CL4RYB",
+        "chamado_assunto": data.chamado_assunto, // Usar o valor de chamado_assunto da API do Sienge
+        "chamado_descricao": JSON.stringify(data),
+        // ... outras propriedades ...
+      };
 
-        var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
-        var tokenMilvus = 'SEU_TOKEN_DE_AUTORIZACAO'; // Substitua pelo seu token real
-
-        const responseMilvus = await fetch(urlMilvus, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': tokenMilvus,
-          },
-          body: JSON.stringify(dadosMilvus),
-        });
-
-        if (!responseMilvus.ok) {
-          throw new Error('Erro na chamada da API Milvus: ' + responseMilvus.status);
-        }
-
-        const resultMilvus = await responseMilvus.json();
-        console.log('Resposta da API Milvus:', resultMilvus);
-
-      } catch (error) {
-        console.error('Erro na chamada da API Milvus:', error);
-      }
+      // Restante do código permanece inalterado
+      // ...
+    } else {
+      console.error('As propriedades documentNumber e/ou chamado_assunto não estão presentes na resposta da API do Sienge.');
     }
+  } catch (error) {
+    console.error('Erro na chamada da API Milvus:', error);
+  }
+}
+
   </script>
 
 </body>
