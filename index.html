@@ -20,7 +20,7 @@
   <script>
     function buscarAPI() {
       var billId = document.getElementById('billId').value;
-      var url = 'https://cors-anywhere.herokuapp.com/https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
+      var url = 'http://localhost:3000/api/bills/' + billId;  // Use a URL do servidor intermediário
 
       // Fazer uma chamada à API usando fetch
       fetch(url)
@@ -33,4 +33,7 @@
       var resultadoElemento = document.getElementById('resultado');
       resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
     }
-  </
+  </script>
+
+</body>
+</html>
