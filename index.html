@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Seus metadados e tags head aqui -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta API</title>
 </head>
 <body>
 
@@ -17,43 +19,25 @@
 
   <script>
     async function buscarEEnviarParaAPIs() {
-      try {
-        var billId = document.getElementById('billId').value;
-        var url = 'http://localhost:3000/api/bills/' + billId;
+      var billId = document.getElementById('billId').value;
+      var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
 
-        const response = await fetch(url);
-        
+      try {
+        const response = await fetch(urlSienge);
         if (!response.ok) {
-          throw new Error('Erro na chamada da API: ' + response.status);
+          throw new Error('Erro na chamada da API Sienge: ' + response.status);
         }
 
         const data = await response.json();
-
         console.log(data);
-        exibirResultado(data);
         enviarParaMilvus(data);
       } catch (error) {
-        console.error(error);
+        console.error('Erro na chamada da API Sienge:', error);
       }
     }
 
-    function exibirResultado(data) {
-      var resultadoElemento = document.getElementById('resultado');
-      resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-    }
-
-    function enviarParaMilvus(data) {
-      // Sua lógica de enviar para o Milvus aqui
-    }
-  </script>
-
-</body>
-</html>
-
-
     async function enviarParaMilvus(data) {
       try {
-        // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
         var dadosMilvus = {
           "cliente_id": "CL4RYB",
           "chamado_assunto": "verde",
@@ -63,14 +47,13 @@
           "chamado_contato": "Teste",
           "chamado_tecnico": "sandro.silva@ebm.com.br",
           "chamado_mesa": "SUPORTE N2",
-          "Setor do Solicitante": "EA3",
+          "Setor_do_Solicitante": "EA3",
           "chamado_categoria_primaria": "E-MAIL",
           "chamado_categoria_secundaria": "Criar",
-          "Unidade de Negócio": "Computador Lento",
+          "Unidade_de_Negócio": "Computador Lento",
           "Empresa": "Computador Lento"
         };
 
-        // Configurar a chamada à API do Milvus
         var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
         var tokenMilvus = 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k';
 
@@ -93,6 +76,12 @@
         console.error('Erro na chamada da API Milvus:', error);
       }
     }
+
+    // Adicione esta parte para enviar uma mensagem para a extensão do Chrome
+    chrome.runtime.sendMessage({ message: "hello" }, function(response) {
+      // Processar a resposta aqui
+      console.log('Resposta da extensão:', response);
+    });
   </script>
 
 </body>
