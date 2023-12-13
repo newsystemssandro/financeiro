@@ -18,14 +18,14 @@
   <div id="resultado"></div>
 
   <script>
- async function enviarParaMilvus(data) {
-  try {
+  async function enviarParaMilvus(data) {
+    try {
     // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
-    var dadosMilvus = {
-      "cliente_id": "CL4RYB",
-      "chamado_assunto": data.documentNumber, // Usar o valor de documentNumber como chamado_assunto da API do Sienge
-      "chamado_descricao": JSON.stringify(data),
-      "id": data.id, // Usar o valor de id como id da API do Sienge
+      var dadosMilvus = {
+        "cliente_id": "CL4RYB",
+        "chamado_assunto": data.documentNumber, // Usar o valor de documentNumber como chamado_assunto da API do Sienge
+        "chamado_descricao": JSON.stringify(data),
+        "id": data.id, // Usar o valor de id como id da API do Sienge
       // ... outras propriedades ...
     };
 
