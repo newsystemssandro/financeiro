@@ -18,24 +18,6 @@
   <div id="resultado"></div>
 
   <script>
-    async function buscarEEnviarParaAPIs() {
-      var billId = document.getElementById('billId').value;
-      var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
-
-      try {
-        const response = await fetch(urlSienge);
-        if (!response.ok) {
-          throw new Error('Erro na chamada da API Sienge: ' + response.status);
-        }
-
-        const data = await response.json();
-        console.log(data);
-        enviarParaMilvus(data);
-      } catch (error) {
-        console.error('Erro na chamada da API Sienge:', error);
-      }
-    }
-
     async function enviarParaMilvus(data) {
       try {
         var dadosMilvus = {
@@ -77,22 +59,33 @@
       }
     }
 
-    // Adicione esta parte para enviar uma mensagem para a extensão do Chrome
-    chrome.runtime.sendMessage({ message: "hello" }, function(response) {
-      // Processar a resposta aqui
-      console.log('Resposta da extensão:', response);
-    });
+    function buscarEEnviarParaAPIs() {
+      var billId = document.getElementById('billId').value;
+      var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
+
+      fetch(urlSienge)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro na chamada da API Sienge: ' + response.status);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data);
+          exibirResultado(data);
+          enviarParaMilvus(data);
+        })
+        .catch(error => {
+          console.error('Erro na chamada da API Sienge:', error);
+          alert('Erro na consulta da API Sienge');
+        });
+    }
+
+    function exibirResultado(data) {
+      var resultadoElemento = document.getElementById('resultado');
+      resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+    }
   </script>
-    console.log('Antes da chamada para a API do Milvus');
-const response = await fetch(urlMilvus, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': tokenMilvus,
-  },
-  body: JSON.stringify(dadosMilvus),
-});
-console.log('Depois da chamada para a API do Milvus');
 
 </body>
 </html>
