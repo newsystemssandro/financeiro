@@ -45,14 +45,14 @@
     }
 
     // Função para enviar dados para a API do Milvus
-    async function enviarParaMilvus(data) {
+   async function enviarParaMilvus(data) {
   try {
     // Verificar se documentNumber e chamado_assunto estão presentes na resposta da API do Sienge
     if ('documentNumber' in data && 'chamado_assunto' in data) {
       // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
       var dadosMilvus = {
         "cliente_id": "CL4RYB",
-        "chamado_assunto": data.id, // Usar o valor de chamado_assunto da API do Sienge
+        "chamado_assunto": data.documentNumber, // Usar o valor de documentNumber como chamado_assunto da API do Sienge
         "chamado_descricao": JSON.stringify(data),
         // ... outras propriedades ...
       };
@@ -66,6 +66,7 @@
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+
 
   </script>
 
