@@ -3,6 +3,11 @@ async function enviarParaMilvus(dataSienge) {
     // Extrair a descrição do Sienge
     const descricaoSienge = dataSienge.documentIdentificationId || "Descrição não disponível";
 
+    // Verificar se a descrição está vazia
+    if (!descricaoSienge.trim()) {
+      throw new Error('A descrição do Sienge está vazia.');
+    }
+
     // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
     var dadosMilvus = {
       "cliente_id": "CL4RYB",
@@ -23,8 +28,9 @@ async function enviarParaMilvus(dataSienge) {
 
     // Configurar a chamada à API do Milvus
     var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
-    var tokenMilvus = mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k; // Substituir pelo seu token
+    var tokenMilvus = 'SEU_TOKEN_MILVUS'; // Substituir pelo seu token
 
+    // Substituir pelo seu token de acesso ao Milvus
     const response = await fetch(urlMilvus, {
       method: 'POST',
       headers: {
