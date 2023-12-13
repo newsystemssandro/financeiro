@@ -27,7 +27,7 @@
         const response = await fetch(url, { mode: 'no-cors' });
 
         if (!response.ok) {
-          throw new Error(`Erro na chamada da API: ${response.status} - ${response.statusText}`);
+          throw new Error(`Erro na chamada da API Sienge: ${response.status} - ${response.statusText}`);
         }
 
         const textData = await response.text();
@@ -37,8 +37,8 @@
         try {
           data = JSON.parse(textData);
         } catch (jsonError) {
-          console.error('Erro ao analisar a resposta como JSON:', jsonError.message);
-          console.log('Resposta da API (como texto):', textData);
+          console.error('Erro ao analisar a resposta da API Sienge como JSON:', jsonError.message);
+          console.log('Resposta da API Sienge (como texto):', textData);
           return;
         }
 
@@ -51,7 +51,7 @@
         // Enviar dados para a API Milvus
         await enviarParaMilvus(milvusData);
       } catch (error) {
-        console.error('Erro na chamada da API:', error.message);
+        console.error('Erro geral na chamada da API:', error.message);
       }
     }
 
@@ -91,7 +91,7 @@
         const milvusResponseBody = await milvusResponse.json();
         console.log('Resposta do Milvus:', milvusResponseBody);
       } catch (error) {
-        console.error(error.message);
+        console.error('Erro ao enviar dados para Milvus:', error.message);
       }
     }
   </script>
