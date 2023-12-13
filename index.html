@@ -26,9 +26,13 @@ async function enviarParaMilvus(dataSienge) {
       // ... outras propriedades ...
     };
 
+    // Verificar se o token do Milvus está definido
+    if (!tokenMilvus || tokenMilvus === 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k') {
+      throw new Error('Token do Milvus não configurado corretamente.');
+    }
+
     // Configurar a chamada à API do Milvus
     var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
-    var tokenMilvus = 'SEU_TOKEN_MILVUS'; // Substituir pelo seu token
 
     // Substituir pelo seu token de acesso ao Milvus
     const response = await fetch(urlMilvus, {
