@@ -52,6 +52,7 @@
         await enviarParaMilvus(milvusData);
       } catch (error) {
         console.error('Erro geral na chamada da API:', error.message);
+        console.log('Detalhes adicionais da resposta da API Sienge:', textData);
       }
     }
 
