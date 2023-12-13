@@ -18,31 +18,28 @@
   <div id="resultado"></div>
 
   <script>
-    async function buscarEEnviarParaAPIs() {
-      try {
-        var billId = document.getElementById('billId').value;
-        var urlSienge = 'http://localhost:3000/api/bills/' + billId;
+  async function enviarParaMilvus(data) {
+  try {
+    // Verificar se documentNumber e chamado_assunto estão presentes na resposta da API do Sienge
+    if ('documentNumber' in data) {
+      // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
+      var dadosMilvus = {
+        "cliente_id": "CL4RYB",
+        "chamado_assunto": data.documentNumber, // Usar o valor de documentNumber como chamado_assunto da API do Sienge
+        "chamado_descricao": JSON.stringify(data),
+        // ... outras propriedades ...
+      };
 
-        const response = await fetch(urlSienge);
-
-        if (!response.ok) {
-          throw new Error('Erro na chamada da API Sienge: ' + response.status);
-        }
-
-        const data = await response.json();
-        console.log(data);
-
-        // Adicione aqui a lógica para manipular os dados da API Sienge
-        enviarParaMilvus(data);
-
-        // Exibindo o resultado na página (você pode ajustar conforme necessário)
-        var resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-
-      } catch (error) {
-        console.error('Erro na chamada da API Sienge:', error);
-      }
+      // Restante do código permanece inalterado
+      // ...
+    } else {
+      console.error('A propriedade documentNumber não está presente na resposta da API do Sienge.');
     }
+  } catch (error) {
+    console.error('Erro na chamada da API Milvus:', error);
+  }
+}
+
 
     // Função para enviar dados para a API do Milvus
    async function enviarParaMilvus(data) {
