@@ -18,23 +18,20 @@
   <div id="resultado"></div>
 
   <script>
-    // Função para buscar a API
     function buscarAPI() {
-  var billId = document.getElementById('billId').value;
-  var url = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
+      var billId = document.getElementById('billId').value;
+      var url = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
 
-  // Fazer uma chamada à API usando fetch com 'no-cors'
-  fetch(url, { mode: 'no-cors' })
-    .then(response => response.text()) // converter para texto devido ao 'no-cors'
-    .then(data => exibirResultado(data))
-    .catch(error => console.error('Erro na chamada da API:', error));
-}
+      // Fazer uma chamada à API usando fetch com 'no-cors'
+      fetch(url, { mode: 'no-cors' })
+        .then(response => response.text()) // converter para texto devido ao 'no-cors'
+        .then(data => exibirResultado(data))
+        .catch(error => console.error('Erro na chamada da API:', error));
+    }
 
-
-    // Função para exibir resultado
     function exibirResultado(data) {
       var resultadoElemento = document.getElementById('resultado');
-      resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+      resultadoElemento.innerHTML = "<pre>" + data + "</pre>";
     }
   </script>
 
