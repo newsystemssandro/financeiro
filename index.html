@@ -19,7 +19,9 @@ function buscarEEnviarParaAPIs() {
 async function enviarParaMilvus(dataSienge) {
   try {
     // Extrair a descrição do Sienge
-    const descricaoSienge = dataSienge.documentIdentificationId || "Descrição não disponível";
+    const descricaoSienge = dataSienge.documentIdentificationId !== undefined && dataSienge.documentIdentificationId !== null
+      ? dataSienge.documentIdentificationId
+      : "Descrição não disponível";
 
     // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
     var dadosMilvus = {
@@ -38,7 +40,11 @@ async function enviarParaMilvus(dataSienge) {
       "Empresa": "Computador Lento",
       // ... outras propriedades ...
     };
-
+  // Restante do seu código...
+  } catch (error) {
+    console.error('Erro na chamada da API Milvus:', error);
+  }
+}
     // Configurar a chamada à API do Milvus
     var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
     var tokenMilvus = 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k'; // Substituir pelo seu token
