@@ -55,13 +55,18 @@
 
    // ... Código anterior ...
 
-async function buscarEEnviarParaAPIs() {
+    async function buscarEEnviarParaAPIs() {
   var billId = document.getElementById('billId').value;
   var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
 
   try {
     // Fetch para a API do Sienge
-    const response = await fetch(urlSienge);
+    const response = await fetch(urlSienge, {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Basic ' + btoa('ebm-api:7C4FHs824Prr'),  // Autenticação básica
+      },
+    });
 
     if (!response.ok) {
       throw new Error('Erro na chamada da API Sienge: ' + response.status);
@@ -77,6 +82,7 @@ async function buscarEEnviarParaAPIs() {
     console.error('Erro na chamada da API Sienge:', error);
   }
 }
+
 
 // ... Código posterior ...
 
