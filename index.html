@@ -89,4 +89,27 @@
         }
 
         // Enviar dados para Milvus usando fetch
-        const milvusResponse = await
+        const milvusResponse = await fetch('https://apiintegracao.milvus.com.br/api/chamado/criar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k',
+          },
+          body: JSON.stringify(milvusData),
+        });
+
+        if (!milvusResponse.ok) {
+          throw new Error(`Erro na chamada da API Milvus: ${milvusResponse.status} - ${milvusResponse.statusText}`);
+        }
+
+        const milvusTextData = await milvusResponse.text();
+
+        console.log('Resposta da API Milvus:', milvusTextData);
+      } catch (error) {
+        console.error('Erro ao enviar para a API Milvus:', error.message);
+      }
+    }
+  </script>
+
+</body>
+</html>
