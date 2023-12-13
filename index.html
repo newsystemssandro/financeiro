@@ -18,19 +18,6 @@
   <div id="resultado"></div>
 
   <script>
-    // Função para obter parâmetros da URL
-    function obterParametroURL(nome) {
-      var urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(nome);
-    }
-
-    // Preencher o campo billId se estiver presente na URL
-    var billIdDaURL = obterParametroURL('billId');
-    if (billIdDaURL) {
-      document.getElementById('billId').value = billIdDaURL;
-      buscarAPI(); // Se houver um billId na URL, realizar a busca automaticamente
-    }
-
     // Função para buscar a API
     function buscarAPI() {
       var billId = document.getElementById('billId').value;
