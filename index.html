@@ -1,53 +1,41 @@
-function buscarEEnviarParaAPIs() {
-  var billId = document.getElementById('billId').value;
-  var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta API</title>
+</head>
+<body>
 
-  fetch(urlSienge)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erro na chamada da API Sienge: ' + response.status);
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Processar os dados recebidos do Sienge
-      console.log(data);
-      // Aqui você pode enviar os dados para a API do Milvus
-      enviarParaMilvus(data);
-    })
-    .catch(error => console.error('Erro na chamada da API Sienge:', error));
-}
+  <h1>Consulta API</h1>
 
-async function enviarParaMilvus(data) {
-  // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
-  var dadosMilvus = {
-    "cliente_id": "CL4RYB",
-    "chamado_assunto": "verde",
-    "chamado_descricao": JSON.stringify(data),  // Converter dados para string JSON
-    // ... outras propriedades ...
-  };
+  <form>
+    <label for="billId">ID do Título:</label>
+    <input type="text" id="billId" name="billId" required>
+    <button type="button" onclick="buscarAPI()">Buscar</button>
+  </form>
 
-  // Configurar a chamada à API do Milvus
-  var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
-  var tokenMilvus = 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k';  // Substituir pelo seu token
+  <div id="resultado"></div>
 
-  try {
-    const response = await fetch(urlMilvus, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': tokenMilvus,
-      },
-      body: JSON.stringify(dadosMilvus),
-    });
+  <script>
+    // Função para buscar a API
+    function buscarAPI() {
+      var billId = document.getElementById('billId').value;
+      var url = 'http://localhost:3000/api/bills/' + billId;  // Use a URL do servidor intermediário
 
-    if (!response.ok) {
-      throw new Error('Erro na chamada da API Milvus: ' + response.status);
+      // Fazer uma chamada à API usando fetch
+      fetch(url)
+        .then(response => response.json())
+        .then(data => exibirResultado(data))
+        .catch(error => console.error('Erro na chamada da API:', error));
     }
 
-    const result = await response.json();
-    console.log('Resposta da API Milvus:', result);
-  } catch (error) {
-    console.error('Erro na chamada da API Milvus:', error);
-  }
-}
+    // Função para exibir resultado
+    function exibirResultado(data) {
+      var resultadoElemento = document.getElementById('resultado');
+      resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+    }
+  </script>
+
+</body>
+</html>
