@@ -2,11 +2,7 @@ function buscarEEnviarParaAPIs() {
   var billId = document.getElementById('billId').value;
   var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
 
-  fetch(urlSienge, {
-    headers: {
-      'Authorization': 'SeuTokenAqui', // Substituir pelo seu token de acesso ao Sienge
-    },
-  })
+  fetch(urlSienge)
     .then(response => {
       if (!response.ok) {
         throw new Error('Erro na chamada da API Sienge: ' + response.status);
@@ -14,51 +10,44 @@ function buscarEEnviarParaAPIs() {
       return response.json();
     })
     .then(data => {
+      // Processar os dados recebidos do Sienge
       console.log(data);
+      // Aqui você pode enviar os dados para a API do Milvus
       enviarParaMilvus(data);
     })
     .catch(error => console.error('Erro na chamada da API Sienge:', error));
 }
 
-function enviarParaMilvus(dataSienge) {
-  // Dados da API do Sienge
+async function enviarParaMilvus(data) {
+  // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
   var dadosMilvus = {
     "cliente_id": "CL4RYB",
     "chamado_assunto": "verde",
-    "chamado_descricao": JSON.stringify(dataSienge), // Converte o objeto para uma string JSON
-    "chamado_email": "sandro.silva@ebm.com.br",
-    "chamado_telefone": "(11) 1234-1234",
-    "chamado_contato": "Teste",
-    "chamado_tecnico": "sandro.silva@ebm.com.br",
-    "chamado_mesa": "SUPORTE N2",
-    "Setor do Solicitante": "EA3",
-    "chamado_categoria_primaria": "E-MAIL",
-    "chamado_categoria_secundaria": "Criar",
-    "Unidade de Negócio": "Computador Lento",
-    "Empresa": "Computador Lento"
+    "chamado_descricao": JSON.stringify(data),  // Converter dados para string JSON
+    // ... outras propriedades ...
   };
 
-  // URL da API do Milvus
+  // Configurar a chamada à API do Milvus
   var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
+  var tokenMilvus = 'SEU_TOKEN_MILVUS';  // Substituir pelo seu token
 
-  // Token de autenticação para a API do Milvus
-  var tokenMilvus = 'SeuTokenMilvusAqui'; // Substituir pelo seu token de acesso ao Milvus
+  try {
+    const response = await fetch(urlMilvus, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': tokenMilvus,
+      },
+      body: JSON.stringify(dadosMilvus),
+    });
 
-  // Enviar dados para a API do Milvus
-  fetch(urlMilvus, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': tokenMilvus,
-    },
-    body: JSON.stringify(dadosMilvus),
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erro na chamada da API Milvus: ' + response.status);
-      }
-      return response.json();
-    })
-    .then(data => console.log('Resposta da API do Milvus:', data))
-    .catch(error => console.error('Erro na chamada da API Milvus:', error));
+    if (!response.ok) {
+      throw new Error('Erro na chamada da API Milvus: ' + response.status);
+    }
+
+    const result = await response.json();
+    console.log('Resposta da API Milvus:', result);
+  } catch (error) {
+    console.error('Erro na chamada da API Milvus:', error);
+  }
 }
