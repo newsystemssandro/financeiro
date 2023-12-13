@@ -12,13 +12,13 @@
   <form>
     <label for="billId">ID do Título:</label>
     <input type="text" id="billId" name="billId" required>
-    <button type="button" onclick="buscarEEnviarParaAPIs()">Buscar</button>
+    <button type="button" onclick="buscarAPI()">Buscar</button>
   </form>
 
   <div id="resultado"></div>
 
   <script>
-    function buscarEEnviarParaAPIs() {
+    function buscarAPI() {
       var billId = document.getElementById('billId').value;
       var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
 
