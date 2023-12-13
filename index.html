@@ -83,6 +83,16 @@
       console.log('Resposta da extensão:', response);
     });
   </script>
+    console.log('Antes da chamada para a API do Milvus');
+const response = await fetch(urlMilvus, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': tokenMilvus,
+  },
+  body: JSON.stringify(dadosMilvus),
+});
+console.log('Depois da chamada para a API do Milvus');
 
 </body>
 </html>
