@@ -22,15 +22,21 @@
       var billId = document.getElementById('billId').value;
       var url = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
 
-      // Adicionar cabeçalhos de autenticação à solicitação
-      var headers = new Headers();
-      headers.append('Authorization', 'Basic ' + btoa('ebm-api:7C4FHs824Prr'));
+      // Adicionar cabeçalho de autenticação à solicitação
+      var headers = new Headers({
+        'Authorization': 'Basic ' + btoa('ebm-api:7C4FHs824Prr')
+      });
 
       // Fazer uma chamada à API usando fetch
       fetch(url, { headers: headers })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro na chamada da API: ' + response.status);
+          }
+          return response.json();
+        })
         .then(data => exibirResultado(data))
-        .catch(error => console.error('Erro na chamada da API:', error));
+        .catch(error => console.error(error));
     }
 
     function exibirResultado(data) {
