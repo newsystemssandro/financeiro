@@ -3,24 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consulta API</title>
+  <title>Consulta Sienge e Envio para Milvus</title>
 </head>
 <body>
 
-  <h1>Consulta API</h1>
-
-  <form>
-    <label for="billId">ID do Título:</label>
-    <input type="text" id="billId" name="billId" required>
-    <button type="button" onclick="buscarEEnviarParaAPIs()">Buscar</button>
-  </form>
-
-  <div id="resultado"></div>
+  <label for="billId">ID da Fatura:</label>
+  <input type="text" id="billId" name="billId">
+  <button onclick="buscarEEnviarParaAPIs()">Consultar e Enviar</button>
 
   <script>
     async function enviarParaMilvus(data) {
       try {
-        console.log('Antes da chamada para a API do Milvus');
         var dadosMilvus = {
           "cliente_id": "CL4RYB",
           "chamado_assunto": "verde",
@@ -30,10 +23,10 @@
           "chamado_contato": "Teste",
           "chamado_tecnico": "sandro.silva@ebm.com.br",
           "chamado_mesa": "SUPORTE N2",
-          "Setor_do_Solicitante": "EA3",
+          "Setor do Solicitante": "EA3",
           "chamado_categoria_primaria": "E-MAIL",
           "chamado_categoria_secundaria": "Criar",
-          "Unidade_de_Negócio": "Computador Lento",
+          "Unidade de Negócio": "Computador Lento",
           "Empresa": "Computador Lento"
         };
 
@@ -48,8 +41,6 @@
           },
           body: JSON.stringify(dadosMilvus),
         });
-
-        console.log('Depois da chamada para a API do Milvus');
 
         if (!response.ok) {
           throw new Error('Erro na chamada da API Milvus: ' + response.status);
@@ -74,19 +65,10 @@
           return response.json();
         })
         .then(data => {
-          console.log(data);
-          exibirResultado(data);
+          console.log('Resposta da API Sienge:', data);
           enviarParaMilvus(data);
         })
-        .catch(error => {
-          console.error('Erro na chamada da API Sienge:', error);
-          alert('Erro na consulta da API Sienge');
-        });
-    }
-
-    function exibirResultado(data) {
-      var resultadoElemento = document.getElementById('resultado');
-      resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+        .catch(error => console.error('Erro na chamada da API Sienge:', error));
     }
   </script>
 
