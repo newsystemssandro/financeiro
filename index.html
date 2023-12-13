@@ -1,12 +1,25 @@
+function buscarEEnviarParaAPIs() {
+  var billId = document.getElementById('billId').value;
+  var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
+
+  fetch(urlSienge)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erro na chamada da API Sienge: ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Dados recebidos do Sienge:', data);
+      enviarParaMilvus(data);
+    })
+    .catch(error => console.error('Erro na chamada da API Sienge:', error));
+}
+
 async function enviarParaMilvus(dataSienge) {
   try {
     // Extrair a descrição do Sienge
     const descricaoSienge = dataSienge.documentIdentificationId || "Descrição não disponível";
-
-    // Verificar se a descrição está vazia
-    if (!descricaoSienge.trim()) {
-      throw new Error('A descrição do Sienge está vazia.');
-    }
 
     // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
     var dadosMilvus = {
@@ -26,15 +39,13 @@ async function enviarParaMilvus(dataSienge) {
       // ... outras propriedades ...
     };
 
-    // Verificar se o token do Milvus está definido
-    if (!tokenMilvus || tokenMilvus === 'mzFdxy6kmDsGE4AQ6KYNMiwQWrnKCn6mNdhlL4JaCZLT4njQkybXRpVhRxNKVOfrY54qDvfxMIk39Kd1X7QfjzY6EZoTvVVlOyx9k') {
-      throw new Error('Token do Milvus não configurado corretamente.');
-    }
-
     // Configurar a chamada à API do Milvus
     var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
+    var tokenMilvus = 'SEU_TOKEN_MILVUS'; // Substituir pelo seu token
 
-    // Substituir pelo seu token de acesso ao Milvus
+    // Adicione logs para debugging
+    console.log('Enviando dados para Milvus:', dadosMilvus);
+
     const response = await fetch(urlMilvus, {
       method: 'POST',
       headers: {
@@ -43,6 +54,8 @@ async function enviarParaMilvus(dataSienge) {
       },
       body: JSON.stringify(dadosMilvus),
     });
+
+    console.log('Resposta da API Milvus:', response);
 
     if (!response.ok) {
       throw new Error('Erro na chamada da API Milvus: ' + response.status);
@@ -54,16 +67,3 @@ async function enviarParaMilvus(dataSienge) {
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
-console.log('Enviando dados para Milvus:', dadosMilvus);
-
-const response = await fetch(urlMilvus, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': tokenMilvus,
-  },
-  body: JSON.stringify(dadosMilvus),
-});
-
-console.log('Resposta da API Milvus:', response);
-
