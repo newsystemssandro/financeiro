@@ -18,38 +18,11 @@
   <div id="resultado"></div>
 
   <script>
-    async function buscarEEnviarParaAPIs() {
-      try {
-        var billId = document.getElementById('billId').value;
-        var urlSienge = 'http://localhost:3000/api/bills/' + billId;
-
-        const response = await fetch(urlSienge);
-
-        if (!response.ok) {
-          throw new Error('Erro na chamada da API Sienge: ' + response.status);
-        }
-
-        const data = await response.json();
-        console.log('Dados da API do Sienge:', data);
-
-        // Adicione aqui a lógica para manipular os dados da API Sienge
-        enviarParaMilvus(data);
-
-        // Exibindo o resultado na página (você pode ajustar conforme necessário)
-        var resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-
-      } catch (error) {
-        console.error('Erro na chamada da API Sienge:', error);
-      }
-    }
-
-    // Função para enviar dados para a API do Milvus
-    // Função para enviar dados para a API do Milvus
-  async function enviarParaMilvus(data) {
-    try {
-    // Verificar se documentNumber existe e não é nulo
-    const documentNumber = data.documentNumber !== undefined && data.documentNumber !== null ? data.documentNumber.toString() : '';
+ // Função para enviar dados para a API do Milvus
+async function enviarParaMilvus(data) {
+  try {
+    // Verificar se id existe e não é nulo
+    const id = data.id !== undefined && data.id !== null ? data.id.toString() : '';
 
     // Verificar se issueDate existe e não é nulo
     const issueDate = data.issueDate !== undefined && data.issueDate !== null ? data.issueDate.toString() : '';
@@ -65,7 +38,7 @@
 
     var dadosMilvus = {
       "cliente_id": "CL4RYB",
-      "chamado_assunto": `Título: ${documentNumber} - Data de Vencimento: ${issueDate} - R$: ${totalInvoiceAmount} - Desconto: ${discount} - Usuário Registrado: ${registeredUserId}`,
+      "chamado_assunto": `ID: ${id} - Data de Vencimento: ${issueDate} - R$: ${totalInvoiceAmount} - Desconto: ${discount} - Usuário Registrado: ${registeredUserId}`,
       "chamado_descricao": JSON.stringify(data),
       "chamado_email": "sandro.silva@ebm.com.br",
       "chamado_telefone": "(11) 1234-1234",
@@ -102,6 +75,7 @@
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+
 
   </script>
 
