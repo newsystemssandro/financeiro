@@ -1,3 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta API</title>
+</head>
+<body>
+
+  <h1>Consulta API</h1>
+
+  <form>
+    <label for="billId">ID do Título:</label>
+    <input type="text" id="billId" name="billId" required>
+    <button type="button" onclick="buscarEEnviarParaAPIs()">Buscar</button>
+  </form>
+
+  <div id="resultado"></div>
+
+  <script>
+    async function buscarEEnviarParaAPIs() {
+      try {
+        var billId = document.getElementById('billId').value;
+        var urlSienge = 'http://localhost:3000/api/bills/' + billId;
+
+        const response = await fetch(urlSienge);
+
+        if (!response.ok) {
+          throw new Error('Erro na chamada da API Sienge: ' + response.status);
+        }
+
+        const data = await response.json();
+        console.log('Dados da API do Sienge:', data);
+
+        // Adicione aqui a lógica para manipular os dados da API Sienge
+        enviarParaMilvus(data);
+
+        // Exibindo o resultado na página (você pode ajustar conforme necessário)
+        var resultadoElemento = document.getElementById('resultado');
+        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+
+      } catch (error) {
+        console.error('Erro na chamada da API Sienge:', error);
+      }
+    }
+
 // Função para enviar dados para a API do Milvus
 async function enviarParaMilvus(data) {
   try {
@@ -50,3 +96,10 @@ async function enviarParaMilvus(data) {
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+
+  </script>
+
+</body>
+</html>
+
+
