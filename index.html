@@ -18,47 +18,65 @@
   <div id="resultado"></div>
 
   <script>
-  async function enviarParaMilvus(data) {
-    try {
-    // Configurar dados para a API do Milvus usando os dados recebidos do Sienge
-      var dadosMilvus = {
-        "cliente_id": "CL4RYB",
-        "chamado_assunto": data.documentNumber, // Usar o valor de documentNumber como chamado_assunto da API do Sienge
-        "chamado_descricao": JSON.stringify(data),
-        "id": data.id, // Usar o valor de id como id da API do Sienge
-      // ... outras propriedades ...
-    };
+    async function buscarEEnviarParaAPIs() {
+      try {
+        var billId = document.getElementById('billId').value;
+        var urlSienge = 'http://localhost:3000/api/bills/' + billId;
 
-    // Restante do código permanece inalterado
-    // ...
-  } catch (error) {
-    console.error('Erro na chamada da API Milvus:', error);
-  }
-}
+        const response = await fetch(urlSienge);
 
+        if (!response.ok) {
+          throw new Error('Erro na chamada da API Sienge: ' + response.status);
+        }
 
+        const data = await response.json();
+        console.log(data);
+
+        // Adicione aqui a lógica para manipular os dados da API Sienge
+        enviarParaMilvus(data);
+
+        // Exibindo o resultado na página (você pode ajustar conforme necessário)
+        var resultadoElemento = document.getElementById('resultado');
+        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+
+      } catch (error) {
+        console.error('Erro na chamada da API Sienge:', error);
+      }
+    }
 
     // Função para enviar dados para a API do Milvus
- async function buscarEEnviarParaAPIs() {
-  try {
-    var billId = document.getElementById('billId').value;
-    var urlSienge = 'https://api.sienge.com.br/ebm/public/api/v1/bills/' + billId;
+    async function enviarParaMilvus(data) {
+      try {
+        var dadosMilvus = {
+          "cliente_id": "CL4RYB",
+          "chamado_assunto": "verde",
+          "chamado_descricao": JSON.stringify(data),
+          // ... outras propriedades ...
+        };
 
-    const response = await fetch(urlSienge);
-    const data = await response.json();
+        var urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
+        var tokenMilvus = 'SEU_TOKEN_DE_AUTORIZACAO'; // Substitua pelo seu token real
 
-    // Imprimir no console a estrutura dos dados recebidos
-    console.log('Dados da API do Sienge:', data);
+        const responseMilvus = await fetch(urlMilvus, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': tokenMilvus,
+          },
+          body: JSON.stringify(dadosMilvus),
+        });
 
-    // Restante do código permanece inalterado
-    // ...
-  } catch (error) {
-    console.error('Erro na chamada da API Sienge:', error);
-  }
-}
+        if (!responseMilvus.ok) {
+          throw new Error('Erro na chamada da API Milvus: ' + responseMilvus.status);
+        }
 
+        const resultMilvus = await responseMilvus.json();
+        console.log('Resposta da API Milvus:', resultMilvus);
 
-
+      } catch (error) {
+        console.error('Erro na chamada da API Milvus:', error);
+      }
+    }
   </script>
 
 </body>
