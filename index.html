@@ -35,7 +35,7 @@ async function buscarEEnviarParaAPIs() {
     // Adicione a lógica para preencher chamado_assunto com documentNumber
     var dadosMilvus = {
       "cliente_id": "CL4RYB",
-      "chamado_assunto": data.documentNumber,  // Ajuste aqui para usar documentNumber
+      "chamado_assunto": data.documentNumber.toString(),  // Ajuste aqui para usar documentNumber
       "chamado_descricao": JSON.stringify(data),
       "chamado_email": "sandro.silva@ebm.com.br",
       "chamado_telefone": "(11) 1234-1234",
@@ -64,12 +64,13 @@ async function buscarEEnviarParaAPIs() {
 
 
     // Função para enviar dados para a API do Milvus
+// Função para enviar dados para a API do Milvus
 async function enviarParaMilvus(data) {
   try {
     // Ajuste para usar o valor de documentNumber como chamado_assunto
     var dadosMilvus = {
       "cliente_id": "CL4RYB",
-      "chamado_assunto": data.documentNumber,  // Ajuste aqui para usar documentNumber
+      "chamado_assunto": data.documentNumber.toString(),  // Converta para string
       "chamado_descricao": JSON.stringify(data),
       "chamado_email": "sandro.silva@ebm.com.br",
       "chamado_telefone": "(11) 1234-1234",
@@ -106,6 +107,7 @@ async function enviarParaMilvus(data) {
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+
 
   </script>
 
