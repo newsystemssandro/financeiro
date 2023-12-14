@@ -67,10 +67,18 @@ async function buscarEEnviarParaAPIs() {
 // Função para enviar dados para a API do Milvus
 async function enviarParaMilvus(data) {
   try {
-    // Ajuste para usar o valor de documentNumber como chamado_assunto
+    // Verificar se documentNumber existe e não é nulo
+    const documentNumber = data.documentNumber ? data.documentNumber.toString() : '';
+
+    // Verificar se issueDate existe e não é nulo
+    const issueDate = data.issueDate ? data.issueDate.toString() : '';
+
+    // Verificar se totalInvoiceAmount existe e não é nulo
+    const totalInvoiceAmount = data.totalInvoiceAmount ? data.totalInvoiceAmount.toString() : '';
+
     var dadosMilvus = {
       "cliente_id": "CL4RYB",
-      "chamado_assunto": data.documentNumber.toString(),  // Converta para string
+      "chamado_assunto": documentNumber + ' - ' + issueDate + ' - ' + totalInvoiceAmount,
       "chamado_descricao": JSON.stringify(data),
       "chamado_email": "sandro.silva@ebm.com.br",
       "chamado_telefone": "(11) 1234-1234",
@@ -107,6 +115,7 @@ async function enviarParaMilvus(data) {
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+
 
 
   </script>
