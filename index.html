@@ -68,13 +68,13 @@ async function buscarEEnviarParaAPIs() {
 async function enviarParaMilvus(data) {
   try {
     // Verificar se documentNumber existe e não é nulo
-    const documentNumber = data.documentNumber ? data.documentNumber.toString() : '';
+    const documentNumber = data.documentNumber !== undefined && data.documentNumber !== null ? data.documentNumber.toString() : '';
 
     // Verificar se issueDate existe e não é nulo
-    const issueDate = data.issueDate ? data.issueDate.toString() : '';
+    const issueDate = data.issueDate !== undefined && data.issueDate !== null ? data.issueDate.toString() : '';
 
     // Verificar se totalInvoiceAmount existe e não é nulo
-    const totalInvoiceAmount = data.totalInvoiceAmount ? data.totalInvoiceAmount.toString() : '';
+    const totalInvoiceAmount = data.totalInvoiceAmount !== undefined && data.totalInvoiceAmount !== null ? data.totalInvoiceAmount.toString() : '';
 
     var dadosMilvus = {
       "cliente_id": "CL4RYB",
@@ -115,6 +115,7 @@ async function enviarParaMilvus(data) {
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+
 
 
 
