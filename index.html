@@ -22,16 +22,18 @@
 async function enviarParaMilvus(data) {
   try {
     // Verificar se documentNumber existe e não é nulo
-    const documentNumber = data.documentNumber !== undefined && data.documentNumber !== null ? data.documentNumber.toString() : '';
+    const documentNumber = data.documentNumber !== undefined && data.documentNumber !== null ? data.documentNumber : '';
 
     // Verificar se issueDate existe e não é nulo
-    const issueDate = data.issueDate !== undefined && data.issueDate !== null ? data.issueDate.toString() : '';
+    const issueDate = data.issueDate !== undefined && data.issueDate !== null ? data.issueDate : '';
 
     // Verificar se totalInvoiceAmount existe e não é nulo
-    const totalInvoiceAmount = data.totalInvoiceAmount !== undefined && data.totalInvoiceAmount !== null ? data.totalInvoiceAmount.toString() : '';
+    const totalInvoiceAmount = data.totalInvoiceAmount !== undefined && data.totalInvoiceAmount !== null ? data.totalInvoiceAmount : '';
 
     // Criar chamado_assunto apenas com valores não vazios
     const chamadoAssuntoArray = [documentNumber, issueDate, totalInvoiceAmount].filter(value => value !== '');
+
+    // Converter números para string antes de juntar
     const chamadoAssunto = chamadoAssuntoArray.join(' - ');
 
     var dadosMilvus = {
@@ -73,6 +75,7 @@ async function enviarParaMilvus(data) {
     console.error('Erro na chamada da API Milvus:', error);
   }
 }
+
 
 
 
