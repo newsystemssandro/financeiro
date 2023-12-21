@@ -17,6 +17,15 @@
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
 
+    <!-- Adicione o campo de seleção -->
+    <label for="motivo">Motivo:</label>
+    <select id="motivo" name="motivo" required>
+      <option value="atraso_aprovacao">Atraso na aprovação do pedido</option>
+      <option value="atraso_documentos">Medição, atraso no envio dos documentos pelo fornecedor</option>
+      <option value="atraso_lancamento">Atraso no lançamento da AP Sienge</option>
+      <option value="excecao_diretoria">Exceção autorizado pela diretoria</option>
+    </select>
+
     <button type="button" onclick="buscarEEnviarParaAPIs()">Buscar</button>
   </form>
 
@@ -28,6 +37,7 @@
       try {
         const billId = document.getElementById('billId').value;
         const email = document.getElementById('email').value;
+        const motivo = document.getElementById('motivo').value; // Obtenha o valor do campo de seleção
         const urlSienge = 'http://localhost:3000/api/bills/' + billId;
 
         const response = await fetch(urlSienge);
@@ -40,7 +50,7 @@
         console.log('Dados da API do Sienge:', data);
 
         // Adicione aqui a lógica para manipular os dados da API Sienge
-        enviarParaMilvus(data, email);
+        enviarParaMilvus(data, email, motivo);
 
         // Exibindo o resultado na página (você pode ajustar conforme necessário)
         const resultadoElemento = document.getElementById('resultado');
@@ -52,7 +62,7 @@
     }
 
     // Função para enviar dados para a API do Milvus
-    async function enviarParaMilvus(data, email) {
+    async function enviarParaMilvus(data, email, motivo) {
       try {
         const dadosMilvus = {
           "cliente_id": "BDL58K",
@@ -64,7 +74,7 @@
           "chamado_tecnico": "sandro.silva@ebm.com.br",
           "chamado_mesa": "SUPORTE N2",
           "Setor do Solicitante": "EA3",
-          "chamado_categoria_primaria": "E-MAIL",
+          "chamado_categoria_primaria": motivo, // Armazena o motivo selecionado
           "chamado_categoria_secundaria": "Criar",
           "Unidade de Negócio": "Computador Lento",
           "Empresa": "Computador Lento"
