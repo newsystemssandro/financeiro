@@ -10,6 +10,13 @@
   <h1>Escolha a Opção</h1>
 
   <form>
+    <label for="billId">ID do Título:</label>
+    <input type="text" id="billId" name="billId" required>
+
+    <!-- Adicione o campo de e-mail -->
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" required>
+
     <label for="motivo">Motivo:</label>
     <select id="motivo" name="motivo" required>
       <option value="atraso_aprovacao">Atraso na aprovação do pedido</option>
@@ -18,25 +25,20 @@
       <option value="excecao_diretoria">Exceção autorizado pela diretoria</option>
     </select>
 
-    <button type="button" onclick="buscarEEnviarParaAPIs()">Enviar para Milvus</button>
+    <button type="button" onclick="prepararEEnviarParaAPIs()">Enviar para Milvus</button>
   </form>
 
   <div id="resultado"></div>
 
   <script>
-    // Função para enviar dados para a API do Milvus
-    async function buscarEEnviarParaAPIs() {
+    // Função principal para preparar e enviar para APIs
+    async function prepararEEnviarParaAPIs() {
       try {
-        const motivo = document.getElementById('motivo').value; // Obtenha o valor do campo de seleção
+        const billId = document.getElementById('billId').value;
+        const email = document.getElementById('email').value;
+        const motivo = document.getElementById('motivo').value;
 
-        // Adicione aqui a lógica para obter outros valores (como ID do Título e E-mail) se necessário
-        const billId = "SEU_ID_AQUI"; // Substitua pelo código que obtém o ID do Título
-        const email = "SEU_EMAIL_AQUI"; // Substitua pelo código que obtém o E-mail
-
-        // Construa o URL da API Sienge
         const urlSienge = `http://localhost:3000/api/bills/${billId}`;
-
-        // Faça a chamada à API Sienge
         const response = await fetch(urlSienge);
 
         if (!response.ok) {
@@ -71,7 +73,7 @@
           "chamado_tecnico": "sandro.silva@ebm.com.br",
           "chamado_mesa": "SUPORTE N2",
           "Setor do Solicitante": "EA3",
-          "chamado_categoria_primaria": motivo, // Armazena o motivo selecionado
+          "chamado_categoria_primaria": motivo,
           "chamado_categoria_secundaria": "Criar",
           "Unidade de Negócio": "Computador Lento",
           "Empresa": "Computador Lento"
