@@ -61,7 +61,18 @@
           const iframe = document.getElementById('seuFormularioIncorporado');
 
           if (iframe) {
-            iframe.contentWindow.postMessage({ data }, '*');
+            const contentDocument = iframe.contentDocument || iframe.contentWindow.document;
+            
+            // Encontre os campos no formulário Milvus e preencha-os
+            const campoDescricao = contentDocument.getElementById('campoDescricao');
+            const campoOutroCampo = contentDocument.getElementById('outroCampo');
+            
+            if (campoDescricao && campoOutroCampo) {
+              campoDescricao.value = data.descricao; // Substitua 'descricao' pelo campo correto
+              campoOutroCampo.value = data.outroCampo; // Substitua 'outroCampo' pelo campo correto
+            } else {
+              console.error('Campos no formulário Milvus não foram encontrados.');
+            }
           } else {
             console.error('O elemento iframe não foi encontrado.');
           }
