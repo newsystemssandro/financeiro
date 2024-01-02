@@ -64,10 +64,9 @@
     // Função para criar uma tabela com os dados da API
     function criarTabela(data) {
       let tabela = '<table border="1">';
-      for (const key in data) {
-        if (data.hasOwnProperty(key) && key !== 'links') {
-          tabela += `<tr><td>${key}</td><td>${data[key]}</td><td><button onclick="copiar('${key}', '${data[key]}')">Copiar</button></td></tr>`;
-        }
+      const camposVisiveis = ["id", "debtorId", "issueDate", "notes", "discount", "totalInvoiceAmount"];
+      for (const key of camposVisiveis) {
+        tabela += `<tr><td>${key}</td><td>${data[key]}</td><td><button onclick="copiar('${key}', '${data[key]}')">Copiar</button></td></tr>`;
       }
       tabela += '</table>';
       return tabela;
