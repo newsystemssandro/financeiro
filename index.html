@@ -36,8 +36,11 @@
     async function prepararEEnviarParaAPIs() {
       try {
         const billId = document.getElementById('billId').value;
-        const email = document.getElementById('email').value;
-        const motivo = document.getElementById('motivo').value;
+
+        if (!billId) {
+          alert('Por favor, preencha o ID do Título.');
+          return;
+        }
 
         // Substitua o URL abaixo pelo seu servidor intermediário
         const urlIntermediario = `http://localhost:3000/api/bills/${billId}`;
@@ -50,9 +53,14 @@
 
         const data = await response.json();
 
-        // Modificar o conteúdo do iframe
+        // Verifica se o objeto retornado possui a propriedade 'body'
         const iframe = document.querySelector('iframe');
-        iframe.contentDocument.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        if (iframe && iframe.contentDocument && iframe.contentDocument.body) {
+          // Modificar o conteúdo do iframe
+          iframe.contentDocument.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        } else {
+          console.error('Erro ao acessar o conteúdo do iframe.');
+        }
 
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
