@@ -39,7 +39,8 @@
 
         // Alteração no URL para apontar para o seu servidor intermediário
         const urlIntermediario = `http://localhost:3000/api/bills/${billId}`;
-        const response = await fetch(urlIntermediario);
+        
+        const response = await fetch(urlIntermediario, { mode: 'cors' });
 
         if (!response.ok) {
           throw new Error('Erro na chamada da API do Sienge via servidor intermediário: ' + response.status);
@@ -53,9 +54,6 @@
 
         const mensagemDeConfirmacao = document.getElementById('mensagemDeConfirmacao');
         mensagemDeConfirmacao.innerHTML = `Dados enviados com sucesso!<br>ID: ${data.id} - Data de Vencimento: ${data.issueDate} - R$: ${data.totalInvoiceAmount} - Desconto: ${data.discount} - Usuário Registrado: ${data.registeredUserId}`;
-
-        const formularioIncorporado = document.getElementById('seuFormularioIncorporado').contentWindow.document;
-        formularioIncorporado.getElementById('descricaoDoFormularioIncorporado').value = `ID: ${data.id} - Data de Vencimento: ${data.issueDate} - R$: ${data.totalInvoiceAmount} - Desconto: ${data.discount} - Usuário Registrado: ${data.registeredUserId}`;
 
       } catch (error) {
         console.error('Erro na chamada da API do Sienge via servidor intermediário:', error);
