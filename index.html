@@ -86,10 +86,10 @@
 
     // Configurar Clipboard.js para copiar o resultado para a área de transferência
     const copiarResultadoBtn = document.getElementById('copiarResultado');
-    const resultadoPre = document.querySelector('#resultado pre');
     
     const clipboard = new ClipboardJS(copiarResultadoBtn, {
       text: function() {
+        const resultadoPre = document.querySelector('#resultado pre');
         return resultadoPre.innerText;
       }
     });
