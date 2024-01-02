@@ -27,9 +27,6 @@
 
   <button type="button" onclick="prepararEEnviarParaAPIs()">Enviar para Milvus</button>
 
-  <!-- Novo código para o formulário incorporado -->
-  <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9b9ff0060c913f05eabe3378399f661de1df9ec634b3a1898f8c6698afef2ef2c7fb"></iframe>
-
   <!-- Adicione o botão de cópia -->
   <button id="copiarResultado">Copiar Resultado</button>
 
@@ -41,27 +38,9 @@
       try {
         // ... (seu código anterior) ...
 
-        // Adicione aqui a lógica para manipular os dados da API Sienge
-        // Exibindo o resultado na página (você pode ajustar conforme necessário)
-        const resultadoElemento = document.getElementById('resultado');
-        if (resultadoElemento) {
-          resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-        } else {
-          console.error('Elemento #resultado não encontrado.');
-        }
-
         // Atualizar o campo Descrição no formulário incorporado
-        const iframe = document.getElementById('seuFormularioIncorporado');
-        if (iframe) {
-          const descricaoElemento = iframe.contentDocument.getElementById('descricao');
-          if (descricaoElemento) {
-            descricaoElemento.value = data.documentNumber;
-          } else {
-            console.error('Elemento #descricao não encontrado no formulário incorporado.');
-          }
-        } else {
-          console.error('Elemento #seuFormularioIncorporado não encontrado.');
-        }
+        const resultadoElemento = document.getElementById('resultado');
+        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
