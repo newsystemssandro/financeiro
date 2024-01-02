@@ -52,33 +52,66 @@
         console.log('Dados da API do Sienge:', data);
 
         // Adicione aqui a lógica para manipular os dados da API Sienge
+        enviarParaMilvus(data, email, motivo);
+
         // Exibindo o resultado na página (você pode ajustar conforme necessário)
         const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = criarTabela(data);
-
+        resultadoElemento.innerHTML = `
+          <pre>
+            Título: ${data.id} Copiar
+            Código da Empresa: ${data.debtorId} Copiar
+            Data de Vencimento: ${data.issueDate} Copiar
+            Observação: ${data.notes} Copiar
+            Desconto: ${data.discount} Copiar
+            Total do Título: ${data.totalInvoiceAmount} Copiar
+          </pre>`;
+          
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
       }
     }
 
-    // Função para criar uma tabela com os dados da API
-    function criarTabela(data) {
-      let tabela = '<table border="1">';
-      const camposVisiveis = ["id", "debtorId", "issueDate", "notes", "discount", "totalInvoiceAmount"];
-      for (const key of camposVisiveis) {
-        tabela += `<tr><td>${key}</td><td>${data[key]}</td><td><button onclick="copiar('${key}', '${data[key]}')">Copiar</button></td></tr>`;
-      }
-      tabela += '</table>';
-      return tabela;
-    }
+    // Função para enviar dados para a API do Milvus
+    async function enviarParaMilvus(data, email, motivo) {
+      try {
+        const dadosMilvus = {
+          "cliente_id": "BDL58K",
+          "chamado_assunto": `ID: ${data.id} - Data de Vencimento: ${data.issueDate} - R$: ${data.totalInvoiceAmount} - Desconto: ${data.discount} - Usuário Registrado: ${data.registeredUserId}`,
+          "chamado_descricao": JSON.stringify(data),
+          "chamado_email": email,
+          "chamado_telefone": "(11) 1234-1234",
+          "chamado_contato": "Teste",
+          "chamado_tecnico": "sandro.silva@ebm.com.br",
+          "chamado_mesa": motivo, // Agora armazena no campo "chamado_mesa"
+          "Setor do Solicitante": "EA3",
+          "chamado_categoria_primaria": motivo, // Mantém para compatibilidade com a versão anterior
+          "chamado_categoria_secundaria": "Criar",
+          "Unidade de Negócio": "Computador Lento",
+          "Empresa": "Computador Lento"
+        };
 
-    // Função para copiar o conteúdo para a área de transferência
-    function copiar(chave, conteudo) {
-      navigator.clipboard.writeText(conteudo).then(() => {
-        alert(`Conteúdo do campo '${chave}' copiado para a área de transferência: ${conteudo}`);
-      }).catch((err) => {
-        console.error('Erro ao copiar conteúdo:', err);
-      });
+        const urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
+        const tokenMilvus = 'ZCTV8SlgCFh8w2HrFizWFO3oZtOXnEtzO0J4LDNCEQfxwYoXcSOJsZpjSfi7mZ7RGhxl14IiGDI7sJvc7Qx1MK2Wwcq8TXwFEJ8OK';
+
+        const responseMilvus = await fetch(urlMilvus, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': tokenMilvus,
+          },
+          body: JSON.stringify(dadosMilvus),
+        });
+
+        if (!responseMilvus.ok) {
+          throw new Error('Erro na chamada da API Milvus: ' + responseMilvus.status);
+        }
+
+        const resultMilvus = await responseMilvus.json();
+        console.log('Resposta da API Milvus:', resultMilvus);
+
+      } catch (error) {
+        console.error('Erro na chamada da API Milvus:', error);
+      }
     }
   </script>
 
