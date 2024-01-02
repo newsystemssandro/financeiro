@@ -10,8 +10,8 @@
   <h1>Escolha a Opção</h1>
 
   <form>
-    <label for="billId">ID do Título:</label>
-    <input type="text" id="billId" name="billId" required>
+    <label for="id">ID do Título:</label>
+    <input type="text" id="id" name="id" required>
 
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
@@ -38,8 +38,12 @@
   <script>
     async function prepararEEnviarParaAPIs() {
       try {
+        const id = document.getElementById('id').value;
+        const email = document.getElementById('email').value;
+        const motivo = document.getElementById('motivo').value;
+
         // Substitua o URL abaixo pelo seu servidor intermediário
-        const urlIntermediario = `http://localhost:3000/api/bills/${billId}`;
+        const urlIntermediario = `http://localhost:3000/api/bills/${id}`;
         
         const response = await fetch(urlIntermediario, { mode: 'cors' });
 
@@ -65,22 +69,14 @@
       try {
         // Substitua `data` pelos dados reais que você obtém da API do Sienge
         const data = {
-          "id": ,
-          "debtorId": ,
-          "creditorId": ,
-          // Adicione outros campos aqui...
-        };
-
-        // Selecionando apenas os campos desejados
-        const camposDesejados = {
-          "id": data.id,
-          "debtorId": data.debtorId,
-          "creditorId": data.creditorId,
+          "id": document.getElementById('id').value,
+          "debtorId": document.getElementById('debtorId').value,
+          "creditorId": document.getElementById('creditorId').value,
         };
 
         // Criando um elemento de texto temporário
         const textarea = document.createElement('textarea');
-        textarea.value = JSON.stringify(camposDesejados, null, 2);
+        textarea.value = JSON.stringify(data, null, 2);
 
         // Anexando o elemento ao corpo da página
         document.body.appendChild(textarea);
