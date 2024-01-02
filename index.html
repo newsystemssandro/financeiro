@@ -78,18 +78,25 @@
 
         const tabela = document.createElement('table');
 
-        // Adiciona as linhas para cada campo e valor
+        // Adiciona a linha de cabeçalho com os nomes dos campos
+        const cabecalho = tabela.createTHead();
+        const linhaCabecalho = cabecalho.insertRow();
         for (const key in data) {
           if (data.hasOwnProperty(key)) {
             const rotulo = key;
+            const celula = linhaCabecalho.insertCell();
+            celula.innerHTML = `<b>${rotulo}</b>`;
+          }
+        }
+
+        // Adiciona a linha de dados com os valores
+        const corpo = tabela.createTBody();
+        const linhaDados = corpo.insertRow();
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
             const valor = String(data[key]);
-
-            const linha = tabela.insertRow();
-            const celulaRotulo = linha.insertCell(0);
-            const celulaValor = linha.insertCell(1);
-
-            celulaRotulo.innerHTML = `<b>${rotulo}:</b>`;
-            celulaValor.innerHTML = `${valor} <button onclick="copiarCampo('${valor}')">Copiar</button>`;
+            const celula = linhaDados.insertCell();
+            celula.innerHTML = `${valor} <button onclick="copiarCampo('${valor}')">Copiar</button>`;
           }
         }
 
