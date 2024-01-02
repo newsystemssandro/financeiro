@@ -30,9 +30,6 @@
   <div id="resultado"></div>
   <div id="mensagemDeConfirmacao"></div>
 
-  <!-- Formulário Incorporado -->
-  <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameborder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d959ff20d0c923005eabe3378399f661da09296d71381a9f98bac659382ed67f1c7fb"></iframe>
-
   <script>
     async function prepararEEnviarParaAPIs() {
       try {
@@ -40,32 +37,28 @@
         const email = document.getElementById('email').value;
         const motivo = document.getElementById('motivo').value;
 
-        const urlSienge = `http://localhost:3000/api/bills/${billId}`;
-        const response = await fetch(urlSienge);
+        // Alteração no URL para apontar para o seu servidor intermediário
+        const urlIntermediario = `http://localhost:3000/api/bills/${billId}`;
+        const response = await fetch(urlIntermediario);
 
         if (!response.ok) {
-          throw new Error('Erro na chamada da API Sienge: ' + response.status);
+          throw new Error('Erro na chamada da API do Sienge via servidor intermediário: ' + response.status);
         }
 
         const data = await response.json();
-        console.log('Dados da API do Sienge:', data);
+        console.log('Dados da API do Sienge (via servidor intermediário):', data);
 
-        // Exibe o resultado da API na página
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
-        // Atualiza a mensagem de confirmação na página
         const mensagemDeConfirmacao = document.getElementById('mensagemDeConfirmacao');
         mensagemDeConfirmacao.innerHTML = `Dados enviados com sucesso!<br>ID: ${data.id} - Data de Vencimento: ${data.issueDate} - R$: ${data.totalInvoiceAmount} - Desconto: ${data.discount} - Usuário Registrado: ${data.registeredUserId}`;
 
-        // Obtém o conteúdo do formulário incorporado
         const formularioIncorporado = document.getElementById('seuFormularioIncorporado').contentWindow.document;
-
-        // Preenche o campo "Descrição" no formulário incorporado com os dados da API
         formularioIncorporado.getElementById('descricaoDoFormularioIncorporado').value = `ID: ${data.id} - Data de Vencimento: ${data.issueDate} - R$: ${data.totalInvoiceAmount} - Desconto: ${data.discount} - Usuário Registrado: ${data.registeredUserId}`;
 
       } catch (error) {
-        console.error('Erro na chamada da API Sienge:', error);
+        console.error('Erro na chamada da API do Sienge via servidor intermediário:', error);
       }
     }
   </script>
