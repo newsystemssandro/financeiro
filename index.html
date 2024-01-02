@@ -13,15 +13,11 @@
     th, td {
       border: 1px solid #ddd;
       padding: 8px;
-      text-align: center;
+      text-align: left;
     }
 
     th {
       background-color: #f2f2f2;
-    }
-
-    button {
-      margin-left: 10px;
     }
   </style>
 </head>
@@ -33,6 +29,7 @@
     <label for="billId">ID do Título:</label>
     <input type="text" id="billId" name="billId" required>
 
+    <!-- Adicione o campo de e-mail -->
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
 
@@ -47,14 +44,29 @@
     <button type="button" onclick="prepararEEnviarParaAPIs()">Enviar para Milvus</button>
   </form>
 
-  <div id="resultado"></div>
+  <div id="resultado">
+    <h2>Dados da API do Sienge:</h2>
+    <table>
+      <tr>
+        <th>id</th>
+        <th>debtorId</th>
+        <th>issueDate</th>
+        <th>registeredBy</th>
+        <th>notes</th>
+      </tr>
+      <tr>
+        <td id="id">-</td>
+        <td id="debtorId">-</td>
+        <td id="issueDate">-</td>
+        <td id="registeredBy">-</td>
+        <td id="notes">-</td>
+      </tr>
+    </table>
+  </div>
 
-  <!-- Adicione o iframe abaixo onde desejar -->
-  <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881e929ff00f0c923b05eabe3378399f661de2dd94d56ea59886aeed7dab80d715d4c7fb"></iframe>
+  <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881e939ff5080c903a05eabe3378399f661de2dd94d56ea59886aeed7dab80d715d4c7fb"></iframe>
 
   <script>
-    let data; // Variável global para armazenar os dados da API
-
     // Função principal para preparar e enviar para APIs
     async function prepararEEnviarParaAPIs() {
       try {
@@ -69,46 +81,19 @@
           throw new Error('Erro na chamada da API Sienge: ' + response.status);
         }
 
-        data = await response.json();
+        const data = await response.json();
         console.log('Dados da API do Sienge:', data);
 
-        // Adiciona os dados à tabela na página
-        const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = "";
-
-        const tabela = document.createElement('table');
-
-        // Adiciona as linhas para cada campo e valor
-        for (const key in data) {
-          if (data.hasOwnProperty(key)) {
-            const rotulo = key;
-            const valor = String(data[key]);
-
-            const linha = tabela.insertRow();
-            const celulaRotulo = linha.insertCell(0);
-            const celulaValor = linha.insertCell(1);
-
-            celulaRotulo.innerHTML = `<b>${rotulo}</b>`;
-            celulaValor.innerHTML = `${valor} <button onclick="copiarCampo('${valor}')">Copiar</button>`;
-          }
-        }
-
-        resultadoElemento.appendChild(tabela);
+        // Atualiza os campos na tabela
+        document.getElementById('id').textContent = data.id;
+        document.getElementById('debtorId').textContent = data.debtorId;
+        document.getElementById('issueDate').textContent = data.issueDate;
+        document.getElementById('registeredBy').textContent = data.registeredBy;
+        document.getElementById('notes').textContent = data.notes;
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
       }
-    }
-
-    // Função para copiar o conteúdo de um campo específico
-    function copiarCampo(valor) {
-      const campo = document.createElement('textarea');
-      campo.value = valor;
-      document.body.appendChild(campo);
-      campo.select();
-      document.execCommand('copy');
-      document.body.removeChild(campo);
-      alert(`Conteúdo copiado para a área de transferência.`);
     }
   </script>
 
