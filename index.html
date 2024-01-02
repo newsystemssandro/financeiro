@@ -73,19 +73,24 @@
     // Configurar Clipboard.js para copiar o resultado para a área de transferência
     const copiarResultadoBtn = document.getElementById('copiarResultado');
     
-    const clipboard = new ClipboardJS(copiarResultadoBtn, {
-      text: function() {
-        const resultadoPre = document.querySelector('#resultado pre');
-        return resultadoPre.innerText;
-      }
-    });
+    copiarResultadoBtn.addEventListener('click', function() {
+      const resultadoPre = document.querySelector('#resultado pre');
+      const clipboard = new ClipboardJS(copiarResultadoBtn, {
+        text: function() {
+          return resultadoPre.innerText;
+        }
+      });
 
-    clipboard.on('success', function(e) {
-      console.log('Texto copiado:', e.text);
-    });
+      clipboard.on('success', function(e) {
+        console.log('Texto copiado:', e.text);
+      });
 
-    clipboard.on('error', function(e) {
-      console.error('Erro ao copiar texto:', e.action);
+      clipboard.on('error', function(e) {
+        console.error('Erro ao copiar texto:', e.action);
+      });
+
+      // Destruir o objeto Clipboard após o uso
+      clipboard.destroy();
     });
   </script>
 
