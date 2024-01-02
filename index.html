@@ -64,13 +64,12 @@
     function copiarRetornoApi() {
       try {
         const id = document.getElementById('billId').value;
-        const debtorId = document.getElementById('debtorId').value;
-        const creditorId = document.getElementById('creditorId').value;
 
+        // Ajuste aqui para usar os campos disponíveis no retorno da API
         const dadosCopiar = {
           "id": id,
-          "debtorId": debtorId,
-          "creditorId": creditorId,
+          "documentIdentificationId": data.documentIdentificationId,
+          "documentNumber": data.documentNumber,
           // Adicione outros campos conforme necessário
         };
 
