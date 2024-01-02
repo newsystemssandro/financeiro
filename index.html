@@ -13,6 +13,7 @@
     <label for="billId">ID do Título:</label>
     <input type="text" id="billId" name="billId" required>
 
+    <!-- Adicione o campo de e-mail -->
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
 
@@ -51,8 +52,6 @@
         console.log('Dados da API do Sienge:', data);
 
         // Adicione aqui a lógica para manipular os dados da API Sienge
-        exibirResultado(data);
-
         // Exibindo o resultado na página (você pode ajustar conforme necessário)
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = criarTabela(data);
@@ -67,7 +66,7 @@
       let tabela = '<table border="1">';
       for (const key in data) {
         if (data.hasOwnProperty(key) && key !== 'links') {
-          tabela += `<tr><td>${key}</td><td>${data[key]}</td><td><button onclick="copiar('${data[key]}')">Copiar</button></td></tr>`;
+          tabela += `<tr><td>${key}</td><td>${data[key]}</td><td><button onclick="copiar('${key}', '${data[key]}')">Copiar</button></td></tr>`;
         }
       }
       tabela += '</table>';
@@ -75,9 +74,9 @@
     }
 
     // Função para copiar o conteúdo para a área de transferência
-    function copiar(conteudo) {
+    function copiar(chave, conteudo) {
       navigator.clipboard.writeText(conteudo).then(() => {
-        alert('Conteúdo copiado para a área de transferência: ' + conteudo);
+        alert(`Conteúdo do campo '${chave}' copiado para a área de transferência: ${conteudo}`);
       }).catch((err) => {
         console.error('Erro ao copiar conteúdo:', err);
       });
