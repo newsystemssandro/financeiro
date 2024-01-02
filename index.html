@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário com Chamada de API</title>
-  <!-- Adicione a biblioteca Clipboard.js -->
+  <!-- Adicione o script do Clipboard.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 </head>
 <body>
@@ -33,28 +33,22 @@
   <!-- Adicione o botão de cópia -->
   <button id="copiarResultado">Copiar Resultado</button>
 
+  <div id="resultado"></div>
+
   <script>
     // Função principal para preparar e enviar para APIs
     async function prepararEEnviarParaAPIs() {
       try {
-        const billId = document.getElementById('billId').value;
-        const email = document.getElementById('email').value;
-        const motivo = document.getElementById('motivo').value;
-
-        const urlSienge = `http://localhost:3000/api/bills/${billId}`;
-        const response = await fetch(urlSienge);
-
-        if (!response.ok) {
-          throw new Error('Erro na chamada da API Sienge: ' + response.status);
-        }
-
-        const data = await response.json();
-        console.log('Dados da API do Sienge:', data);
+        // ... (seu código anterior) ...
 
         // Adicione aqui a lógica para manipular os dados da API Sienge
         // Exibindo o resultado na página (você pode ajustar conforme necessário)
         const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+        if (resultadoElemento) {
+          resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+        } else {
+          console.error('Elemento #resultado não encontrado.');
+        }
 
         // Atualizar o campo Descrição no formulário incorporado
         const iframe = document.getElementById('seuFormularioIncorporado');
