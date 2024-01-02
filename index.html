@@ -38,33 +38,9 @@
         const email = document.getElementById('email').value;
         const motivo = document.getElementById('motivo').value;
 
-        // Simulação de dados da API Sienge
-        const data = {
-          id: 518118,
-          debtorId: 62,
-          creditorId: 850,
-          documentIdentificationId: 'NFE',
-          documentNumber: '2115',
-          issueDate: '2010-02-13',
-          installmentsNumber: 1,
-          totalInvoiceAmount: 416.76,
-          tenantUrl: 'https://api.sienge.com.br/ebm/public/api',
-          notes: 'Nota fiscal associada ao pedido de compra: 329/10.',
-          discount: 0,
-          status: 'S',
-          originId: 'AC',
-          registeredUserId: 'ANGELOB',
-          registeredBy: 'Angelo Bispo - SAP - 178',
-          registeredDate: '2010-02-17 01:00:00',
-          changedUserId: null,
-          changedBy: null,
-          changedDate: '2010-02-17 01:00:00',
-          links: [
-            { rel: 'installments', href: 'https://api.sienge.com.br/ebm/public/api/v1/bills/518118/installments' },
-            { rel: 'taxes', href: 'https://api.sienge.com.br/ebm/public/api/v1/bills/518118/taxes' },
-            // ... outros links ...
-          ],
-        };
+        // Substitua a chamada à API pelos detalhes reais
+        const response = await fetch(`http://localhost:3000/api/bills/${billId}`);
+        const data = await response.json();
 
         // Atualizar o campo Descrição no formulário incorporado
         const resultadoElemento = document.getElementById('resultado');
