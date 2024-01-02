@@ -31,7 +31,7 @@
 
   <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881e939ff00d0c943e05eabe3378399f661d8dc69ce63baebbd485a31b96a1da1ba8c7fb"></iframe>
 
-  <button id="copiarConteudo" style="display: none;">Copiar Conteúdo</button>
+  <button id="copiarConteudo">Copiar Conteúdo</button>
 
   <script>
     async function prepararEEnviarParaAPIs() {
@@ -81,13 +81,6 @@
         console.error('Erro ao copiar conteúdo:', err);
       });
     });
-
-    // Esperar que o iframe esteja completamente carregado antes de adicionar o evento de copiar
-    document.getElementById('seuFormularioIncorporado').addEventListener('load', function() {
-      // Tornando o botão de copiar visível após o carregamento do iframe
-      document.getElementById('copiarConteudo').style.display = 'block';
-    });
-
   </script>
 
 </body>
