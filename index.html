@@ -60,23 +60,9 @@
 
         // Aguardar um pequeno atraso para garantir que o iframe esteja totalmente carregado
         setTimeout(() => {
-          // Atualizar o conteúdo do formulário incorporado
+          // Enviar mensagem para o iframe
           const iframe = document.getElementById('seuFormularioIncorporado');
-
-          if (iframe) {
-            const contentDocument = iframe.contentDocument || iframe.contentWindow.document;
-            
-            // Substitua 'campoDescricao' pelo ID real do campo no seu formulário Milvus
-            const campoDescricao = contentDocument.getElementById('campoDescricao');
-            
-            if (campoDescricao) {
-              campoDescricao.value = JSON.stringify(data, null, 2);
-            } else {
-              console.error('Campo de descrição no formulário Milvus não foi encontrado.');
-            }
-          } else {
-            console.error('O elemento iframe não foi encontrado.');
-          }
+          iframe.contentWindow.postMessage({ type: 'atualizarDescricao', data: JSON.stringify(data, null, 2) }, '*');
         }, 500); // Ajuste o tempo conforme necessário
 
       } catch (error) {
