@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escolha a Opção</title>
+  <title>Integração Sienge e Milvus</title>
 </head>
 <body>
 
-  <h1>Escolha a Opção</h1>
+  <h1>Integração Sienge e Milvus</h1>
 
   <form>
     <label for="billId">ID do Título:</label>
@@ -31,7 +31,7 @@
 
   <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881e939ff00d0c943e05eabe3378399f661d8dc69ce63baebbd485a31b96a1da1ba8c7fb"></iframe>
 
-  <button id="copiarConteudo" style="display: block;">Copiar Conteúdo</button>
+  <button id="copiarConteudo" style="display: none;">Copiar Conteúdo</button>
 
   <script>
     async function prepararEEnviarParaAPIs() {
@@ -55,8 +55,6 @@
 
         console.log('Dados da API do Sienge (via servidor intermediário):', data);
 
-        enviarParaMilvus(data, email, motivo);
-
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
@@ -66,14 +64,6 @@
       } catch (error) {
         console.error('Erro na chamada da API do Sienge via servidor intermediário:', error);
       }
-    }
-
-    // Função para enviar dados para a API do Milvus
-    async function enviarParaMilvus(data, email, motivo) {
-      // Implemente aqui o código para enviar dados para a API do Milvus
-      // ...
-
-      console.log('Dados enviados para o Milvus:', data);
     }
 
     // Adicionando evento ao botão de copiar conteúdo
@@ -91,6 +81,13 @@
         console.error('Erro ao copiar conteúdo:', err);
       });
     });
+
+    // Esperar que o iframe esteja completamente carregado antes de adicionar o evento de copiar
+    document.getElementById('seuFormularioIncorporado').addEventListener('load', function() {
+      // Tornando o botão de copiar visível após o carregamento do iframe
+      document.getElementById('copiarConteudo').style.display = 'block';
+    });
+
   </script>
 
 </body>
