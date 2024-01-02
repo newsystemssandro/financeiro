@@ -31,30 +31,31 @@
   <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9b9ff0060c913f05eabe3378399f661de1df9ec634b3a1898f8c6698afef2ef2c7fb"></iframe>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      async function prepararEEnviarParaAPIs() {
-        try {
-          const billId = document.getElementById('billId').value;
-          const email = document.getElementById('email').value;
-          const motivo = document.getElementById('motivo').value;
+    async function prepararEEnviarParaAPIs() {
+      try {
+        const billId = document.getElementById('billId').value;
+        const email = document.getElementById('email').value;
+        const motivo = document.getElementById('motivo').value;
 
-          const urlSienge = `http://localhost:3000/api/bills/${billId}`;
-          const response = await fetch(urlSienge);
+        const urlSienge = `http://localhost:3000/api/bills/${billId}`;
+        const response = await fetch(urlSienge);
 
-          if (!response.ok) {
-            throw new Error('Erro na chamada da API Sienge: ' + response.status);
-          }
+        if (!response.ok) {
+          throw new Error('Erro na chamada da API Sienge: ' + response.status);
+        }
 
-          const data = await response.json();
-          console.log('Dados da API do Sienge:', data);
+        const data = await response.json();
+        console.log('Dados da API do Sienge:', data);
 
-          // Adicione aqui a lógica para manipular os dados da API Sienge
-          enviarParaMilvus(data, email, motivo);
+        // Adicione aqui a lógica para manipular os dados da API Sienge
+        enviarParaMilvus(data, email, motivo);
 
-          // Exibindo o resultado na página (você pode ajustar conforme necessário)
-          const resultadoElemento = document.getElementById('resultado');
-          resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+        // Exibindo o resultado na página (você pode ajustar conforme necessário)
+        const resultadoElemento = document.getElementById('resultado');
+        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
+        // Aguardar um pequeno atraso para garantir que o iframe esteja totalmente carregado
+        setTimeout(() => {
           // Atualizar o conteúdo do formulário incorporado
           const iframe = document.getElementById('seuFormularioIncorporado');
 
@@ -63,22 +64,22 @@
           } else {
             console.error('O elemento iframe ou seu conteúdo não foi encontrado.');
           }
+        }, 500); // Ajuste o tempo conforme necessário
 
-        } catch (error) {
-          console.error('Erro na chamada da API Sienge:', error);
-        }
+      } catch (error) {
+        console.error('Erro na chamada da API Sienge:', error);
       }
+    }
 
-      async function enviarParaMilvus(data, email, motivo) {
-        try {
-          // Lógica para enviar para a API Milvus
-          // Mantenha a sua implementação anterior aqui
+    async function enviarParaMilvus(data, email, motivo) {
+      try {
+        // Lógica para enviar para a API Milvus
+        // Mantenha a sua implementação anterior aqui
 
-        } catch (error) {
-          console.error('Erro na chamada da API Milvus:', error);
-        }
+      } catch (error) {
+        console.error('Erro na chamada da API Milvus:', error);
       }
-    });
+    }
   </script>
 
 </body>
