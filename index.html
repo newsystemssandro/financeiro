@@ -3,40 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Integração Sienge e Milvus</title>
+  <title>Copiar Retorno da API do Sienge</title>
 </head>
 <body>
 
-  <h1>Integração Sienge e Milvus</h1>
+  <h1>Copiar Retorno da API do Sienge</h1>
 
-  <form>
-    <label for="billId">ID do Título:</label>
-    <input type="text" id="billId" name="billId" required>
-
-    <label for="email">E-mail:</label>
-    <input type="email" id="email" name="email" required>
-
-    <label for="motivo">Motivo:</label>
-    <select id="motivo" name="motivo" required>
-      <option value="atraso_aprovacao">Atraso na aprovação do pedido</option>
-      <option value="atraso_documentos">Medição, atraso no envio dos documentos pelo fornecedor</option>
-      <option value="atraso_lancamento">Atraso no lançamento da AP Sienge</option>
-      <option value="excecao_diretoria">Exceção autorizado pela diretoria</option>
-    </select>
-
-    <button type="button" onclick="prepararEEnviarParaAPIs()">Enviar para Milvus</button>
-  </form>
+  <button id="copiarConteudo">Copiar Retorno da API</button>
 
   <div id="resultado"></div>
 
-  <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881e939ff00d0c943e05eabe3378399f661d8dc69ce63baebbd485a31b96a1da1ba8c7fb"></iframe>
-
-  <button id="copiarConteudo" style="display: none;">Copiar Conteúdo</button>
-
   <script>
-    async function prepararEEnviarParaAPIs() {
+    // Adicionando evento ao botão de copiar conteúdo
+    document.getElementById('copiarConteudo').addEventListener('click', async function() {
       try {
-        const billId = document.getElementById('billId').value;
+        const billId = prompt('Por favor, insira o ID do título:');
 
         const urlIntermediario = `http://localhost:3000/api/bills/${billId}`;
         const response = await fetch(urlIntermediario, { mode: 'cors' });
@@ -56,26 +37,18 @@
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
-        // Tornando o botão de copiar visível
-        document.getElementById('copiarConteudo').style.display = 'block';
+        // Copiando o conteúdo para a área de transferência
+        const textarea = document.createElement('textarea');
+        textarea.value = JSON.stringify(data, null, 2);
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        alert('Conteúdo copiado com sucesso!');
 
       } catch (error) {
         console.error('Erro na chamada da API do Sienge via servidor intermediário:', error);
-      }
-    }
-
-    // Adicionando evento ao botão de copiar conteúdo
-    document.getElementById('copiarConteudo').addEventListener('click', function() {
-      const iframe = document.getElementById('seuFormularioIncorporado');
-
-      // Enviando mensagem para o iframe
-      iframe.contentWindow.postMessage({ copiarConteudo: true }, '*');
-    });
-
-    // Adicionando ouvinte para receber mensagem do iframe
-    window.addEventListener('message', function(event) {
-      if (event.data && event.data.conteudo) {
-        alert('Conteúdo copiado com sucesso!\n\n' + event.data.conteudo);
       }
     });
   </script>
