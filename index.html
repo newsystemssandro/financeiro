@@ -29,7 +29,9 @@
 
   <div id="resultado"></div>
 
-  <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9a9ff50a0c913b05eabe3378399f661da6d087c663bcbbf7a8a81b9aa9cf6fd4c7fb"></iframe>
+  <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881e939ff00d0c943e05eabe3378399f661d8dc69ce63baebbd485a31b96a1da1ba8c7fb"></iframe>
+
+  <button id="copiarConteudo">Copiar Conteúdo</button>
 
   <script>
     async function prepararEEnviarParaAPIs() {
@@ -55,12 +57,11 @@
 
         enviarParaMilvus(data, email, motivo);
 
-        // Modificar o conteúdo do iframe usando postMessage
-        const iframe = document.getElementById('seuFormularioIncorporado');
-        iframe.contentWindow.postMessage(JSON.stringify(data, null, 2), '*');
-
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+
+        // Tornar o botão de copiar conteúdo visível
+        document.getElementById('copiarConteudo').style.display = 'block';
 
       } catch (error) {
         console.error('Erro na chamada da API do Sienge via servidor intermediário:', error);
@@ -74,7 +75,26 @@
 
       console.log('Dados enviados para o Milvus:', data);
     }
+
+    // Adicionando evento ao botão de copiar conteúdo
+    document.getElementById('copiarConteudo').addEventListener('click', function() {
+      const iframe = document.getElementById('seuFormularioIncorporado');
+      const conteudo = iframe.contentWindow.document.body.innerText;
+
+      // Copiando conteúdo para a área de transferência
+      navigator.clipboard.writeText(conteudo).then(function() {
+        alert('Conteúdo copiado com sucesso!');
+      }).catch(function(err) {
+        console.error('Erro ao copiar conteúdo:', err);
+      });
+    });
   </script>
+
+  <style>
+    #copiarConteudo {
+      display: none; /* Inicialmente oculto até que haja conteúdo para copiar */
+    }
+  </style>
 
 </body>
 </html>
