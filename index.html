@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escolha a Opção</title>
+  <title>Página com Iframe e API</title>
 </head>
 <body>
 
@@ -13,7 +13,6 @@
     <label for="billId">ID do Título:</label>
     <input type="text" id="billId" name="billId" required>
 
-    <!-- Adicione o campo de e-mail -->
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
 
@@ -26,19 +25,15 @@
     </select>
 
     <button type="button" onclick="prepararEEnviarParaAPIs()">Enviar para Milvus</button>
-
-    <!-- Adicione o botão Copiar Retorno da API -->
-    <button type="button" onclick="copiarRetornoApi()">Copiar Retorno da API</button>
+    <button type="button" onclick="copiarRetornoApi()">Copiar Conteúdo da API</button>
   </form>
 
   <div id="resultado"></div>
 
-  <!-- Adicione o iframe abaixo -->
-  <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881e939ff5080c903a05eabe3378399f661db4ebaac26291bad595ed5983f8ab0daec7fb"></iframe>
+  <!-- Adicione o iframe abaixo onde desejar -->
+  <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9a9ff00b0c943c05eabe3378399f661d90e9b5a524aedec7b2ed14b4bccc28d4c7fb"></iframe>
 
   <script>
-    let dadosAPI = null; // Variável global para armazenar os dados da API
-
     // Função principal para preparar e enviar para APIs
     async function prepararEEnviarParaAPIs() {
       try {
@@ -53,50 +48,43 @@
           throw new Error('Erro na chamada da API Sienge: ' + response.status);
         }
 
-        dadosAPI = await response.json();
-        console.log('Dados da API do Sienge:', dadosAPI);
+        const data = await response.json();
+        console.log('Dados da API do Sienge:', data);
 
-        enviarParaMilvus(dadosAPI, email, motivo);
+        // Adicione aqui a lógica para manipular os dados da API Sienge
+        enviarParaMilvus(data, email, motivo);
 
+        // Exibindo o resultado na página (você pode ajustar conforme necessário)
         const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(dadosAPI, null, 2) + "</pre>";
+        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
       }
     }
 
+    // Função para copiar o conteúdo da API
     function copiarRetornoApi() {
       try {
-        const id = document.getElementById('billId').value;
+        // Obtém o conteúdo da API e copia para a área de transferência
+        const resultadoElemento = document.getElementById('resultado');
+        const textoParaCopiar = resultadoElemento.innerText;
+        navigator.clipboard.writeText(textoParaCopiar);
 
-        if (!dadosAPI) {
-          throw new Error('Os dados da API ainda não foram carregados.');
-        }
-
-        const dadosCopiar = {
-          "id": id,
-          "documentIdentificationId": dadosAPI.documentIdentificationId,
-          "documentNumber": dadosAPI.documentNumber,
-          // Adicione outros campos conforme necessário
-        };
-
-        const textarea = document.createElement('textarea');
-        textarea.value = JSON.stringify(dadosCopiar, null, 2);
-
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-
-        alert('Conteúdo copiado com sucesso!');
+        // Exibe uma mensagem indicando que o conteúdo foi copiado
+        alert('Conteúdo da API copiado para a área de transferência!');
       } catch (error) {
         console.error('Erro ao copiar o conteúdo:', error);
       }
     }
 
+    // Função para enviar dados para a API do Milvus
     async function enviarParaMilvus(data, email, motivo) {
-      // Código da função enviarParaMilvus permanece o mesmo
+      try {
+        // ... (seguindo a lógica da função anterior)
+      } catch (error) {
+        console.error('Erro na chamada da API Milvus:', error);
+      }
     }
   </script>
 
