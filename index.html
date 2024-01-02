@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário com Chamada de API</title>
+  <!-- Adicione a biblioteca Clipboard.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 </head>
 <body>
 
@@ -29,6 +31,9 @@
 
   <!-- Novo código para o formulário incorporado -->
   <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9b9ff0060c913f05eabe3378399f661de1df9ec634b3a1898f8c6698afef2ef2c7fb"></iframe>
+
+  <!-- Adicione o botão de cópia -->
+  <button id="copiarResultado">Copiar Resultado</button>
 
   <script>
     // Função principal para preparar e enviar para APIs
@@ -61,11 +66,10 @@
           if (iframe) {
             const contentDocument = iframe.contentDocument || iframe.contentWindow.document;
             
-            // Encontre o campo de descrição no formulário Milvus
+            // Substitua 'campoDescricao' pelo ID real do campo no seu formulário Milvus
             const campoDescricao = contentDocument.getElementById('campoDescricao');
             
             if (campoDescricao) {
-              // Substitua 'descricao' pelo ID real do campo no seu formulário Milvus
               campoDescricao.value = JSON.stringify(data, null, 2);
             } else {
               console.error('Campo de descrição no formulário Milvus não foi encontrado.');
@@ -79,6 +83,24 @@
         console.error('Erro na chamada da API Sienge:', error);
       }
     }
+
+    // Configurar Clipboard.js para copiar o resultado para a área de transferência
+    const copiarResultadoBtn = document.getElementById('copiarResultado');
+    const resultadoPre = document.querySelector('#resultado pre');
+    
+    const clipboard = new ClipboardJS(copiarResultadoBtn, {
+      text: function() {
+        return resultadoPre.innerText;
+      }
+    });
+
+    clipboard.on('success', function(e) {
+      console.log('Texto copiado:', e.text);
+    });
+
+    clipboard.on('error', function(e) {
+      console.error('Erro ao copiar texto:', e.action);
+    });
   </script>
 
 </body>
