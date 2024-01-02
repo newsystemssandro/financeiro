@@ -4,6 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Escolha a Opção</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      margin-left: 10px;
+    }
+  </style>
 </head>
 <body>
 
@@ -52,26 +72,34 @@
         data = await response.json();
         console.log('Dados da API do Sienge:', data);
 
-        // Adiciona os dados ao resultado na página
+        // Adiciona os dados à tabela na página
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "";
 
-        // Mapeia os rótulos personalizados
-        const rotulosPersonalizados = {
-          'id': 'Título a Pagar',
-          'debtorId': 'Empresa',
-          'issueDate': 'Data de Vencimento',
-          // Adicione mais rótulos conforme necessário
-        };
+        const tabela = document.createElement('table');
 
+        // Adiciona a linha de cabeçalho
+        const cabecalho = tabela.createTHead();
+        const linhaCabecalho = cabecalho.insertRow();
         for (const key in data) {
           if (data.hasOwnProperty(key)) {
-            // Use o rótulo personalizado se estiver definido, senão, use o próprio nome do campo
-            const rotulo = rotulosPersonalizados[key] || key;
-            const valor = String(data[key]); // Converte o valor para string
-            resultadoElemento.innerHTML += `<p>${rotulo}: ${valor} <button onclick="copiarCampo('${valor}')">Copiar</button></p>`;
+            const rotulo = key; // Use o próprio nome do campo como rótulo
+            const celula = linhaCabecalho.insertCell();
+            celula.innerHTML = `<b>${rotulo}</b>`;
           }
         }
+
+        // Adiciona a linha de dados
+        const linhaDados = tabela.insertRow();
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            const valor = String(data[key]); // Converte o valor para string
+            const celula = linhaDados.insertCell();
+            celula.innerHTML = `${valor} <button onclick="copiarCampo('${valor}')">Copiar</button>`;
+          }
+        }
+
+        resultadoElemento.appendChild(tabela);
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
@@ -79,16 +107,4 @@
     }
 
     // Função para copiar o conteúdo de um campo específico
-    function copiarCampo(valor) {
-      const campo = document.createElement('textarea');
-      campo.value = valor;
-      document.body.appendChild(campo);
-      campo.select();
-      document.execCommand('copy');
-      document.body.removeChild(campo);
-      alert(`Conteúdo copiado para a área de transferência.`);
-    }
-  </script>
-
-</body>
-</html>
+    function copiarCampo(valor)
