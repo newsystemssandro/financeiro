@@ -68,7 +68,8 @@
           if (data.hasOwnProperty(key)) {
             // Use o rótulo personalizado se estiver definido, senão, use o próprio nome do campo
             const rotulo = rotulosPersonalizados[key] || key;
-            resultadoElemento.innerHTML += `<p>${rotulo}: ${data[key]} <button onclick="copiarCampo('${key}')">Copiar</button></p>`;
+            const valor = String(data[key]); // Converte o valor para string
+            resultadoElemento.innerHTML += `<p>${rotulo}: ${valor} <button onclick="copiarCampo('${valor}')">Copiar</button></p>`;
           }
         }
 
@@ -78,14 +79,14 @@
     }
 
     // Função para copiar o conteúdo de um campo específico
-    function copiarCampo(key) {
+    function copiarCampo(valor) {
       const campo = document.createElement('textarea');
-      campo.value = data[key];
+      campo.value = valor;
       document.body.appendChild(campo);
       campo.select();
       document.execCommand('copy');
       document.body.removeChild(campo);
-      alert(`Conteúdo do campo ${key} copiado para a área de transferência.`);
+      alert(`Conteúdo copiado para a área de transferência.`);
     }
   </script>
 
