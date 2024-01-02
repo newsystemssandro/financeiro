@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha Página com Botão Copiar</title>
+  <title>Escolha a Opção</title>
 </head>
 <body>
 
   <h1>Escolha a Opção</h1>
 
   <form>
-    <label for="id">ID do Título:</label>
-    <input type="text" id="id" name="id" required>
+    <label for="billId">ID do Título:</label>
+    <input type="text" id="billId" name="billId" required>
 
+    <!-- Adicione o campo de e-mail -->
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
 
@@ -32,62 +33,52 @@
 
   <div id="resultado"></div>
 
-  <!-- Adicione o iframe abaixo onde desejar -->
-  <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9a9ff00b0c943c05eabe3378399f661d90e9b5a524aedec7b2ed14b4bccc28d4c7fb"></iframe>
-
   <script>
     async function prepararEEnviarParaAPIs() {
       try {
-        const id = document.getElementById('id').value;
+        const billId = document.getElementById('billId').value;
         const email = document.getElementById('email').value;
         const motivo = document.getElementById('motivo').value;
 
-        // Substitua o URL abaixo pelo seu servidor intermediário
-        const urlIntermediario = `http://localhost:3000/api/bills/${id}`;
-        
-        const response = await fetch(urlIntermediario, { mode: 'cors' });
+        const urlSienge = `http://localhost:3000/api/bills/${billId}`;
+        const response = await fetch(urlSienge);
 
         if (!response.ok) {
-          throw new Error('Erro na chamada da API do Sienge via servidor intermediário: ' + response.status);
+          throw new Error('Erro na chamada da API Sienge: ' + response.status);
         }
 
-        const text = await response.text();
+        const data = await response.json();
+        console.log('Dados da API do Sienge:', data);
 
-        // Modificar o conteúdo do iframe
-        const iframe = document.querySelector('iframe');
-        iframe.contentDocument.body.innerHTML = `<pre>${text}</pre>`;
+        enviarParaMilvus(data, email, motivo);
 
         const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = "<pre>" + text + "</pre>";
+        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
       } catch (error) {
-        console.error('Erro na chamada da API do Sienge via servidor intermediário:', error);
+        console.error('Erro na chamada da API Sienge:', error);
       }
     }
 
     function copiarRetornoApi() {
       try {
-        // Substitua `data` pelos dados reais que você obtém da API do Sienge
-        const data = {
-          "id": document.getElementById('id').value,
-          "debtorId": document.getElementById('debtorId').value,
-          "creditorId": document.getElementById('creditorId').value,
+        const id = document.getElementById('billId').value;
+        const debtorId = document.getElementById('debtorId').value;
+        const creditorId = document.getElementById('creditorId').value;
+
+        const dadosCopiar = {
+          "id": id,
+          "debtorId": debtorId,
+          "creditorId": creditorId,
+          // Adicione outros campos conforme necessário
         };
 
-        // Criando um elemento de texto temporário
         const textarea = document.createElement('textarea');
-        textarea.value = JSON.stringify(data, null, 2);
+        textarea.value = JSON.stringify(dadosCopiar, null, 2);
 
-        // Anexando o elemento ao corpo da página
         document.body.appendChild(textarea);
-
-        // Selecionando o conteúdo do texto
         textarea.select();
-
-        // Executando o comando de cópia
         document.execCommand('copy');
-
-        // Removendo o elemento de texto temporário
         document.body.removeChild(textarea);
 
         alert('Conteúdo copiado com sucesso!');
@@ -95,4 +86,11 @@
         console.error('Erro ao copiar o conteúdo:', error);
       }
     }
- 
+
+    async function enviarParaMilvus(data, email, motivo) {
+      // Código da função enviarParaMilvus permanece o mesmo
+    }
+  </script>
+
+</body>
+</html>
