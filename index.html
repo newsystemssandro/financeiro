@@ -11,8 +11,6 @@
 
   <button id="copiarConteudo">Copiar Retorno da API</button>
 
-  <div id="resultado"></div>
-
   <script>
     // Adicionando evento ao botão de copiar conteúdo
     document.getElementById('copiarConteudo').addEventListener('click', async function() {
@@ -33,9 +31,6 @@
         }
 
         console.log('Dados da API do Sienge (via servidor intermediário):', data);
-
-        const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
         // Copiando o conteúdo para a área de transferência
         const textarea = document.createElement('textarea');
