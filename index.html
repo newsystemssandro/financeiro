@@ -53,6 +53,7 @@
         <th>issueDate</th>
         <th>registeredBy</th>
         <th>notes</th>
+        <th>totalInvoiceAmount</th>
       </tr>
       <tr>
         <td id="id">-</td>
@@ -60,6 +61,7 @@
         <td id="issueDate">-</td>
         <td id="registeredBy">-</td>
         <td id="notes">-</td>
+        <td id="totalInvoiceAmount">-</td>
       </tr>
     </table>
   </div>
@@ -85,11 +87,12 @@
         console.log('Dados da API do Sienge:', data);
 
         // Atualiza os campos na tabela
-        document.getElementById('id').textContent = data.id;
-        document.getElementById('debtorId').textContent = data.debtorId;
-        document.getElementById('issueDate').textContent = data.issueDate;
-        document.getElementById('registeredBy').textContent = data.registeredBy;
-        document.getElementById('notes').textContent = data.notes;
+        document.getElementById('id').textContent = 'id: ' + data.id;
+        document.getElementById('debtorId').textContent = 'debtorId: ' + data.debtorId;
+        document.getElementById('issueDate').textContent = 'issueDate: ' + data.issueDate;
+        document.getElementById('registeredBy').textContent = 'registeredBy: ' + data.registeredBy;
+        document.getElementById('notes').textContent = 'notes: ' + data.notes;
+        document.getElementById('totalInvoiceAmount').textContent = 'totalInvoiceAmount: ' + data.totalInvoiceAmount;
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
