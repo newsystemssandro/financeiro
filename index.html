@@ -29,6 +29,8 @@
 
   <div id="resultado"></div>
 
+  <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9a9ff50a0c913b05eabe3378399f661da6d087c663bcbbf7a8a81b9aa9cf6fd4c7fb"></iframe>
+
   <script>
     async function prepararEEnviarParaAPIs() {
       try {
@@ -52,6 +54,10 @@
         console.log('Dados da API do Sienge (via servidor intermediário):', data);
 
         enviarParaMilvus(data, email, motivo);
+
+        // Modificar o conteúdo do iframe usando postMessage
+        const iframe = document.getElementById('seuFormularioIncorporado');
+        iframe.contentWindow.postMessage(JSON.stringify(data, null, 2), '*');
 
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
