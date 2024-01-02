@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário com Chamada de API</title>
-  <!-- Adicione o script do Clipboard.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 </head>
 <body>
 
@@ -36,7 +34,37 @@
     // Função principal para preparar e enviar para APIs
     async function prepararEEnviarParaAPIs() {
       try {
-        // ... (seu código anterior) ...
+        const billId = document.getElementById('billId').value;
+        const email = document.getElementById('email').value;
+        const motivo = document.getElementById('motivo').value;
+
+        // Simulação de dados da API Sienge
+        const data = {
+          id: 518118,
+          debtorId: 62,
+          creditorId: 850,
+          documentIdentificationId: 'NFE',
+          documentNumber: '2115',
+          issueDate: '2010-02-13',
+          installmentsNumber: 1,
+          totalInvoiceAmount: 416.76,
+          tenantUrl: 'https://api.sienge.com.br/ebm/public/api',
+          notes: 'Nota fiscal associada ao pedido de compra: 329/10.',
+          discount: 0,
+          status: 'S',
+          originId: 'AC',
+          registeredUserId: 'ANGELOB',
+          registeredBy: 'Angelo Bispo - SAP - 178',
+          registeredDate: '2010-02-17 01:00:00',
+          changedUserId: null,
+          changedBy: null,
+          changedDate: '2010-02-17 01:00:00',
+          links: [
+            { rel: 'installments', href: 'https://api.sienge.com.br/ebm/public/api/v1/bills/518118/installments' },
+            { rel: 'taxes', href: 'https://api.sienge.com.br/ebm/public/api/v1/bills/518118/taxes' },
+            // ... outros links ...
+          ],
+        };
 
         // Atualizar o campo Descrição no formulário incorporado
         const resultadoElemento = document.getElementById('resultado');
@@ -47,24 +75,19 @@
       }
     }
 
-    // Configurar Clipboard.js para copiar o resultado para a área de transferência
+    // Configurar a cópia do resultado para a área de transferência
     const copiarResultadoBtn = document.getElementById('copiarResultado');
+    const resultadoPre = document.getElementById('resultado');
 
     copiarResultadoBtn.addEventListener('click', function() {
-      const resultadoPre = document.querySelector('#resultado pre');
-      const clipboard = new ClipboardJS(copiarResultadoBtn, {
-        text: function() {
-          return resultadoPre.innerText;
-        }
-      });
+      const range = document.createRange();
+      range.selectNode(resultadoPre);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand('copy');
+      window.getSelection().removeAllRanges();
 
-      clipboard.on('success', function(e) {
-        console.log('Texto copiado:', e.text);
-      });
-
-      clipboard.on('error', function(e) {
-        console.error('Erro ao copiar texto:', e.action);
-      });
+      console.log('Texto copiado:', resultadoPre.innerText);
     });
   </script>
 
