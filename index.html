@@ -58,7 +58,16 @@
 
         // Atualizar o campo Descrição no formulário incorporado
         const iframe = document.getElementById('seuFormularioIncorporado');
-        iframe.contentDocument.getElementById('descricao').value = data.documentNumber;
+        if (iframe) {
+          const descricaoElemento = iframe.contentDocument.getElementById('descricao');
+          if (descricaoElemento) {
+            descricaoElemento.value = data.documentNumber;
+          } else {
+            console.error('Elemento #descricao não encontrado no formulário incorporado.');
+          }
+        } else {
+          console.error('Elemento #seuFormularioIncorporado não encontrado.');
+        }
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
