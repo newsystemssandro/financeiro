@@ -13,7 +13,6 @@
     <label for="billId">ID do Título:</label>
     <input type="text" id="billId" name="billId" required>
 
-    <!-- Adicione o campo de e-mail -->
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
 
@@ -51,10 +50,11 @@
         const data = await response.json();
         console.log('Dados da API do Sienge:', data);
 
+        // Exibe o resultado da API na página
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
-        // Exibe o resultado da API na página
+        // Atualiza a mensagem de confirmação na página
         const mensagemDeConfirmacao = document.getElementById('mensagemDeConfirmacao');
         mensagemDeConfirmacao.innerHTML = `Dados enviados com sucesso!<br>ID: ${data.id} - Data de Vencimento: ${data.issueDate} - R$: ${data.totalInvoiceAmount} - Desconto: ${data.discount} - Usuário Registrado: ${data.registeredUserId}`;
 
