@@ -60,10 +60,16 @@
           // Atualizar o conteúdo do formulário incorporado
           const iframe = document.getElementById('seuFormularioIncorporado');
 
-          if (iframe && iframe.contentDocument && iframe.contentDocument.body) {
-            iframe.contentDocument.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+          if (iframe) {
+            iframe.onload = function() {
+              if (iframe.contentDocument && iframe.contentDocument.body) {
+                iframe.contentDocument.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+              } else {
+                console.error('O conteúdo do iframe não foi encontrado.');
+              }
+            };
           } else {
-            console.error('O elemento iframe ou seu conteúdo não foi encontrado.');
+            console.error('O elemento iframe não foi encontrado.');
           }
         }, 500); // Ajuste o tempo conforme necessário
 
