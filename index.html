@@ -78,24 +78,17 @@
 
         const tabela = document.createElement('table');
 
-        // Adiciona a linha de cabeçalho
-        const cabecalho = tabela.createTHead();
-        const linhaCabecalho = cabecalho.insertRow();
+        // Adiciona as linhas de dados
         for (const key in data) {
           if (data.hasOwnProperty(key)) {
             const rotulo = key; // Use o próprio nome do campo como rótulo
-            const celula = linhaCabecalho.insertCell();
-            celula.innerHTML = `<b>${rotulo}</b>`;
-          }
-        }
-
-        // Adiciona a linha de dados
-        const linhaDados = tabela.insertRow();
-        for (const key in data) {
-          if (data.hasOwnProperty(key)) {
             const valor = String(data[key]); // Converte o valor para string
-            const celula = linhaDados.insertCell();
-            celula.innerHTML = `${valor} <button onclick="copiarCampo('${valor}')">Copiar</button>`;
+            const linha = tabela.insertRow();
+            const celulaRotulo = linha.insertCell();
+            const celulaValor = linha.insertCell();
+
+            celulaRotulo.innerHTML = `<b>${rotulo}</b>`;
+            celulaValor.innerHTML = `${valor} <button onclick="copiarCampo('${valor}')">Copiar</button>`;
           }
         }
 
@@ -107,4 +100,16 @@
     }
 
     // Função para copiar o conteúdo de um campo específico
-    function copiarCampo(valor)
+    function copiarCampo(valor) {
+      const campo = document.createElement('textarea');
+      campo.value = valor;
+      document.body.appendChild(campo);
+      campo.select();
+      document.execCommand('copy');
+      document.body.removeChild(campo);
+      alert(`Conteúdo copiado para a área de transferência.`);
+    }
+  </script>
+
+</body>
+</html>
