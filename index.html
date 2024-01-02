@@ -51,14 +51,14 @@
           throw new Error('Erro na chamada da API do Sienge via servidor intermediário: ' + response.status);
         }
 
-        const data = await response.json();
+        const text = await response.text();
 
         // Modificar o conteúdo do iframe
         const iframe = document.querySelector('iframe');
-        iframe.contentDocument.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        iframe.contentDocument.body.innerHTML = `<pre>${text}</pre>`;
 
         const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+        resultadoElemento.innerHTML = "<pre>" + text + "</pre>";
 
       } catch (error) {
         console.error('Erro na chamada da API do Sienge via servidor intermediário:', error);
@@ -95,7 +95,4 @@
         console.error('Erro ao copiar o conteúdo:', error);
       }
     }
-  </script>
-
-</body>
-</html>
+ 
