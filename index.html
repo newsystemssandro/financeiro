@@ -34,6 +34,8 @@
   <div id="resultado"></div>
 
   <script>
+    let dadosAPI = null; // Variável global para armazenar os dados da API
+
     // Função principal para preparar e enviar para APIs
     async function prepararEEnviarParaAPIs() {
       try {
@@ -48,13 +50,13 @@
           throw new Error('Erro na chamada da API Sienge: ' + response.status);
         }
 
-        const data = await response.json();
-        console.log('Dados da API do Sienge:', data);
+        dadosAPI = await response.json();
+        console.log('Dados da API do Sienge:', dadosAPI);
 
-        enviarParaMilvus(data, email, motivo);
+        enviarParaMilvus(dadosAPI, email, motivo);
 
         const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+        resultadoElemento.innerHTML = "<pre>" + JSON.stringify(dadosAPI, null, 2) + "</pre>";
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
@@ -65,11 +67,14 @@
       try {
         const id = document.getElementById('billId').value;
 
-        // Ajuste aqui para usar os campos disponíveis no retorno da API
+        if (!dadosAPI) {
+          throw new Error('Os dados da API ainda não foram carregados.');
+        }
+
         const dadosCopiar = {
           "id": id,
-          "documentIdentificationId": data.documentIdentificationId,
-          "documentNumber": data.documentNumber,
+          "documentIdentificationId": dadosAPI.documentIdentificationId,
+          "documentNumber": dadosAPI.documentNumber,
           // Adicione outros campos conforme necessário
         };
 
