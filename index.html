@@ -60,10 +60,10 @@
           // Modificar o conteúdo do iframe
           const iframe = document.getElementById('seuFormularioIncorporado');
 
-          if (iframe) {
+          if (iframe && iframe.contentDocument && iframe.contentDocument.body) {
             iframe.contentDocument.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
           } else {
-            console.error('O elemento iframe não foi encontrado.');
+            console.error('O elemento iframe ou seu conteúdo não foi encontrado.');
           }
 
         } catch (error) {
