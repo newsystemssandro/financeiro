@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página com Iframe e API</title>
+  <title>Escolha a Opção</title>
 </head>
 <body>
 
@@ -29,10 +29,8 @@
 
   <div id="resultado"></div>
 
-  <!-- Adicione o iframe abaixo onde desejar -->
-  <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9a9ff00b0c943c05eabe3378399f661d90e9b5a524aedec7b2ed14b4bccc28d4c7fb"></iframe>
-
   <script>
+    // Função principal para preparar e enviar para APIs
     async function prepararEEnviarParaAPIs() {
       try {
         const billId = document.getElementById('billId').value;
@@ -49,42 +47,40 @@
         const data = await response.json();
         console.log('Dados da API do Sienge:', data);
 
-        // Adicione aqui a lógica para manipular os dados da API Sienge
-        enviarParaMilvus(data, email, motivo);
-
-        // Exibindo o resultado na página (você pode ajustar conforme necessário)
+        // Adiciona os dados ao resultado na página
         const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = formatarResultado(data);
+        resultadoElemento.innerHTML = "";
+
+        // Mapeia os rótulos personalizados
+        const rotulosPersonalizados = {
+          'id': 'Título a Pagar',
+          'debtorId': 'Empresa',
+          'issueDate': 'Data de Vencimento',
+          // Adicione mais rótulos conforme necessário
+        };
+
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            // Use o rótulo personalizado se estiver definido, senão, use o próprio nome do campo
+            const rotulo = rotulosPersonalizados[key] || key;
+            resultadoElemento.innerHTML += `<p>${rotulo}: ${data[key]} <button onclick="copiarCampo('${key}')">Copiar</button></p>`;
+          }
+        }
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
       }
     }
 
-    function formatarResultado(data) {
-      let html = '<pre>';
-      for (const key in data) {
-        html += `<div><strong>${key}:</strong> ${data[key]} <button onclick="copiarValor('${data[key]}')">Copiar</button></div>`;
-      }
-      html += '</pre>';
-      return html;
-    }
-
-    function copiarValor(valor) {
-      try {
-        navigator.clipboard.writeText(valor);
-        alert('Valor copiado para a área de transferência!');
-      } catch (error) {
-        console.error('Erro ao copiar o valor:', error);
-      }
-    }
-
-    async function enviarParaMilvus(data, email, motivo) {
-      try {
-        // ... (seguindo a lógica da função anterior)
-      } catch (error) {
-        console.error('Erro na chamada da API Milvus:', error);
-      }
+    // Função para copiar o conteúdo de um campo específico
+    function copiarCampo(key) {
+      const campo = document.createElement('textarea');
+      campo.value = data[key];
+      document.body.appendChild(campo);
+      campo.select();
+      document.execCommand('copy');
+      document.body.removeChild(campo);
+      alert(`Conteúdo do campo ${key} copiado para a área de transferência.`);
     }
   </script>
 
