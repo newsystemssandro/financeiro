@@ -57,14 +57,24 @@
         // Exibindo o resultado na página (você pode ajustar conforme necessário)
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = `
-          <pre>
-            Título: ${data.id} Copiar
-            Código da Empresa: ${data.debtorId} Copiar
-            Data de Vencimento: ${data.issueDate} Copiar
-            Observação: ${data.notes} Copiar
-            Desconto: ${data.discount} Copiar
-            Total do Título: ${data.totalInvoiceAmount} Copiar
-          </pre>`;
+          <table border="1">
+            <tr>
+              <th>Título</th>
+              <th>Código da Empresa</th>
+              <th>Data de Vencimento</th>
+              <th>Observação</th>
+              <th>Desconto</th>
+              <th>Total do Título</th>
+            </tr>
+            <tr>
+              <td>${data.id} <button onclick="copiarTexto('${data.id}')">Copiar</button></td>
+              <td>${data.debtorId} <button onclick="copiarTexto('${data.debtorId}')">Copiar</button></td>
+              <td>${data.issueDate} <button onclick="copiarTexto('${data.issueDate}')">Copiar</button></td>
+              <td>${data.notes} <button onclick="copiarTexto('${data.notes}')">Copiar</button></td>
+              <td>${data.discount} <button onclick="copiarTexto('${data.discount}')">Copiar</button></td>
+              <td>${data.totalInvoiceAmount} <button onclick="copiarTexto('${data.totalInvoiceAmount}')">Copiar</button></td>
+            </tr>
+          </table>`;
           
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
@@ -112,6 +122,16 @@
       } catch (error) {
         console.error('Erro na chamada da API Milvus:', error);
       }
+    }
+
+    // Função para copiar texto para a área de transferência
+    function copiarTexto(texto) {
+      const textarea = document.createElement('textarea');
+      textarea.value = texto;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
     }
   </script>
 
