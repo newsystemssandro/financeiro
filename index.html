@@ -49,8 +49,6 @@
         console.log('Dados da API do Sienge:', data);
 
         // Adicione aqui a lógica para manipular os dados da API Sienge
-        enviarParaMilvus(data, email, motivo);
-
         // Exibindo o resultado na página (você pode ajustar conforme necessário)
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
@@ -63,15 +61,14 @@
           if (iframe) {
             const contentDocument = iframe.contentDocument || iframe.contentWindow.document;
             
-            // Encontre os campos no formulário Milvus e preencha-os
+            // Encontre o campo de descrição no formulário Milvus
             const campoDescricao = contentDocument.getElementById('campoDescricao');
-            const campoOutroCampo = contentDocument.getElementById('outroCampo');
             
-            if (campoDescricao && campoOutroCampo) {
-              campoDescricao.value = data.descricao; // Substitua 'descricao' pelo campo correto
-              campoOutroCampo.value = data.outroCampo; // Substitua 'outroCampo' pelo campo correto
+            if (campoDescricao) {
+              // Substitua 'descricao' pelo ID real do campo no seu formulário Milvus
+              campoDescricao.value = JSON.stringify(data, null, 2);
             } else {
-              console.error('Campos no formulário Milvus não foram encontrados.');
+              console.error('Campo de descrição no formulário Milvus não foi encontrado.');
             }
           } else {
             console.error('O elemento iframe não foi encontrado.');
@@ -80,17 +77,6 @@
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
-      }
-    }
-
-    // Função para enviar dados para a API do Milvus
-    async function enviarParaMilvus(data, email, motivo) {
-      try {
-        // Lógica para enviar para a API Milvus
-        // Mantenha a sua implementação anterior aqui
-
-      } catch (error) {
-        console.error('Erro na chamada da API Milvus:', error);
       }
     }
   </script>
