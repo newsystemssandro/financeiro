@@ -4,22 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Escolha a Opção</title>
-  <style>
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-  </style>
 </head>
 <body>
 
@@ -29,7 +13,6 @@
     <label for="billId">ID do Título:</label>
     <input type="text" id="billId" name="billId" required>
 
-    <!-- Adicione o campo de e-mail -->
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
 
@@ -44,29 +27,10 @@
     <button type="button" onclick="prepararEEnviarParaAPIs()">Enviar para Milvus</button>
   </form>
 
-  <div id="resultado">
-    <h2>Dados da API do Sienge:</h2>
-    <table>
-      <tr>
-        <th>id</th>
-        <th>debtorId</th>
-        <th>issueDate</th>
-        <th>registeredBy</th>
-        <th>notes</th>
-        <th>totalInvoiceAmount</th>
-      </tr>
-      <tr>
-        <td id="id">-</td>
-        <td id="debtorId">-</td>
-        <td id="issueDate">-</td>
-        <td id="registeredBy">-</td>
-        <td id="notes">-</td>
-        <td id="totalInvoiceAmount">-</td>
-      </tr>
-    </table>
-  </div>
+  <div id="resultado"></div>
 
-  <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881e939ff5080c903a05eabe3378399f661de2dd94d56ea59886aeed7dab80d715d4c7fb"></iframe>
+  <!-- Adicione o iframe abaixo onde desejar -->
+  <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9a9ff00b0c943c05eabe3378399f661d90e9b5a524aedec7b2ed14b4bccc28d4c7fb"></iframe>
 
   <script>
     // Função principal para preparar e enviar para APIs
@@ -86,17 +50,37 @@
         const data = await response.json();
         console.log('Dados da API do Sienge:', data);
 
-        // Atualiza os campos na tabela
-        document.getElementById('id').textContent = 'id: ' + data.id;
-        document.getElementById('debtorId').textContent = 'debtorId: ' + data.debtorId;
-        document.getElementById('issueDate').textContent = 'issueDate: ' + data.issueDate;
-        document.getElementById('registeredBy').textContent = 'registeredBy: ' + data.registeredBy;
-        document.getElementById('notes').textContent = 'notes: ' + data.notes;
-        document.getElementById('totalInvoiceAmount').textContent = 'totalInvoiceAmount: ' + data.totalInvoiceAmount;
+        // Adicione aqui a lógica para manipular os dados da API Sienge
+        exibirResultado(data);
+
+        // Exibindo o resultado na página (você pode ajustar conforme necessário)
+        const resultadoElemento = document.getElementById('resultado');
+        resultadoElemento.innerHTML = criarTabela(data);
 
       } catch (error) {
         console.error('Erro na chamada da API Sienge:', error);
       }
+    }
+
+    // Função para criar uma tabela com os dados da API
+    function criarTabela(data) {
+      let tabela = '<table border="1">';
+      for (const key in data) {
+        if (data.hasOwnProperty(key) && key !== 'links') {
+          tabela += `<tr><td>${key}</td><td>${data[key]}</td><td><button onclick="copiar('${data[key]}')">Copiar</button></td></tr>`;
+        }
+      }
+      tabela += '</table>';
+      return tabela;
+    }
+
+    // Função para copiar o conteúdo para a área de transferência
+    function copiar(conteudo) {
+      navigator.clipboard.writeText(conteudo).then(() => {
+        alert('Conteúdo copiado para a área de transferência: ' + conteudo);
+      }).catch((err) => {
+        console.error('Erro ao copiar conteúdo:', err);
+      });
     }
   </script>
 
