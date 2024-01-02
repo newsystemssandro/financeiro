@@ -61,13 +61,7 @@
           const iframe = document.getElementById('seuFormularioIncorporado');
 
           if (iframe) {
-            iframe.onload = function() {
-              if (iframe.contentDocument && iframe.contentDocument.body) {
-                iframe.contentDocument.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-              } else {
-                console.error('O conteúdo do iframe não foi encontrado.');
-              }
-            };
+            iframe.contentWindow.postMessage({ data }, '*');
           } else {
             console.error('O elemento iframe não foi encontrado.');
           }
