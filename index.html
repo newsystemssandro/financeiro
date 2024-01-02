@@ -33,6 +33,8 @@
   <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881e929ff00f0c923b05eabe3378399f661de2dd94d56ea59886aeed7dab80d715d4c7fb"></iframe>
 
   <script>
+    let data; // Variável global para armazenar os dados da API
+
     // Função principal para preparar e enviar para APIs
     async function prepararEEnviarParaAPIs() {
       try {
@@ -47,7 +49,7 @@
           throw new Error('Erro na chamada da API Sienge: ' + response.status);
         }
 
-        const data = await response.json();
+        data = await response.json();
         console.log('Dados da API do Sienge:', data);
 
         // Adiciona os dados ao resultado na página
