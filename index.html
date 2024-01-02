@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escolha a Opção</title>
+  <title>Formulário com Chamada de API</title>
 </head>
 <body>
 
@@ -13,7 +13,6 @@
     <label for="billId">ID do Título:</label>
     <input type="text" id="billId" name="billId" required>
 
-    <!-- Adicione o campo de e-mail -->
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
 
@@ -29,6 +28,10 @@
   </form>
 
   <div id="resultado"></div>
+  <div id="mensagemDeConfirmacao"></div>
+
+  <!-- Adicione o ID ao iframe -->
+  <iframe id="seuFormularioIncorporado" width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d959ff4060c913805eabe3378399f661da2eaf5a624e1ac87ebb315a5f0f11ca9c7fb"></iframe>
 
   <script>
     async function prepararEEnviarParaAPIs() {
@@ -37,60 +40,30 @@
         const email = document.getElementById('email').value;
         const motivo = document.getElementById('motivo').value;
 
-        const urlSienge = `http://localhost:3000/api/bills/${billId}`;
-        const response = await fetch(urlSienge);
+        // Alteração no URL para apontar para o seu servidor intermediário
+        const urlIntermediario = `http://localhost:3000/api/bills/${billId}`;
+        
+        const response = await fetch(urlIntermediario, { mode: 'cors' });
 
         if (!response.ok) {
-          throw new Error('Erro na chamada da API Sienge: ' + response.status);
+          throw new Error('Erro na chamada da API do Sienge via servidor intermediário: ' + response.status);
         }
 
         const data = await response.json();
-        console.log('Dados da API do Sienge:', data);
-
-        enviarParaMilvus(data, email, motivo);
+        console.log('Dados da API do Sienge (via servidor intermediário):', data);
 
         const resultadoElemento = document.getElementById('resultado');
         resultadoElemento.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
 
+        const mensagemDeConfirmacao = document.getElementById('mensagemDeConfirmacao');
+        mensagemDeConfirmacao.innerHTML = `Dados enviados com sucesso!<br>ID: ${data.id} - Data de Vencimento: ${data.issueDate} - R$: ${data.totalInvoiceAmount} - Desconto: ${data.discount} - Usuário Registrado: ${data.registeredUserId}`;
+
+        // Envie uma mensagem para o iframe
+        const iframe = document.getElementById('seuFormularioIncorporado');
+        iframe.contentWindow.postMessage(`ID: ${data.id} - Data de Vencimento: ${data.issueDate} - R$: ${data.totalInvoiceAmount} - Desconto: ${data.discount} - Usuário Registrado: ${data.registeredUserId}`, '*');
+
       } catch (error) {
-        console.error('Erro na chamada da API Sienge:', error);
-      }
-    }
-
-    function enviarParaMilvus(data, email, motivo) {
-      try {
-        const dadosMilvus = {
-          // ... (seu código existente)
-        };
-
-        const urlMilvus = 'https://apiintegracao.milvus.com.br/api/chamado/criar';
-        const tokenMilvus = 'ZCTV8SlgCFh8w2HrFizWFO3oZtOXnEtzO0J4LDNCEQfxwYoXcSOJsZpjSfi7mZ7RGhxl14IiGDI7sJvc7Qx1MK2Wwcq8TXwFEJ8OK';
-
-        fetch(urlMilvus, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': tokenMilvus,
-          },
-          body: JSON.stringify(dadosMilvus),
-        })
-        .then(responseMilvus => {
-          if (!responseMilvus.ok) {
-            throw new Error('Erro na chamada da API Milvus: ' + responseMilvus.status);
-          }
-          return responseMilvus.json();
-        })
-        .then(resultMilvus => {
-          console.log('Resposta da API Milvus:', resultMilvus);
-          
-          // Abre o formulário do Milvus em uma nova janela ou guia
-          window.open('https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d949ff5080c953005eabe3378399f661d85cefde10f808ed2e4a34b96faab6babc7fb');
-        })
-        .catch(error => {
-          console.error('Erro na chamada da API Milvus:', error);
-        });
-      } catch (error) {
-        console.error('Erro na chamada da API Milvus:', error);
+        console.error('Erro na chamada da API do Sienge via servidor intermediário:', error);
       }
     }
   </script>
