@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escolha a Opção</title>
+  <title>Página com Iframe e API</title>
 </head>
 <body>
 
@@ -13,7 +13,6 @@
     <label for="billId">ID do Título:</label>
     <input type="text" id="billId" name="billId" required>
 
-    <!-- Adicione o campo de e-mail -->
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
 
@@ -26,7 +25,6 @@
     </select>
 
     <button type="button" onclick="prepararEEnviarParaAPIs()">Enviar para Milvus</button>
-    <button type="button" onclick="copiarRetornoApi()">Copiar Conteúdo</button>
   </form>
 
   <div id="resultado"></div>
@@ -35,35 +33,60 @@
   <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9a9ff00b0c943c05eabe3378399f661d90e9b5a524aedec7b2ed14b4bccc28d4c7fb"></iframe>
 
   <script>
-    // Função para copiar o retorno da API
-    function copiarRetornoApi() {
+    async function prepararEEnviarParaAPIs() {
       try {
-        // Substitua `data` pelos dados reais que você obtém da API do Sienge
-        const data = {
-          "título_a_pagar": document.getElementById('billId').value,
-          "Empresa": 62, // Pode ser qualquer valor padrão
-          "documentIdentificationId": "NFE ",
-          "documentNumber": "2115",
-          "data_de_vencimento": "2010-02-13",
-          "installmentsNumber": 1,
-          "totalInvoiceAmount": 416.76,
-          "tenantUrl": "https://api.sienge.com.br/ebm/public/api",
-          "notes": "Nota fiscal associada ao pedido de compra: 329/10.",
-          "discount": 0,
-          "status": "S",
-          "originId": "AC",
-          "registeredUserId": "ANGELOB",
-          "registeredBy": "Angelo Bispo - SAP - 178",
-          "registeredDate": "2010-02-17 01:00:00",
-          "changedUserId": null,
-          "changedBy": null,
-          "changedDate": "2010-02-17 01:00:00",
-        };
+        const billId = document.getElementById('billId').value;
+        const email = document.getElementById('email').value;
+        const motivo = document.getElementById('motivo').value;
 
-        // Gere o texto formatado
-        const textoFormatado = `Título a Pagar: ${data.título_a_pagar}\nEmpresa: ${data.Empresa}\nDocument Identification ID: ${data.documentIdentificationId}\nDocument Number: ${data.documentNumber}\nData de Vencimento: ${data.data_de_vencimento}\nInstallments Number: ${data.installmentsNumber}\nTotal Invoice Amount: ${data.totalInvoiceAmount}\nTenant URL: ${data.tenantUrl}\nNotes: ${data.notes}\nDiscount: ${data.discount}\nStatus: ${data.status}\nOrigin ID: ${data.originId}\nRegistered User ID: ${data.registeredUserId}\nRegistered By: ${data.registeredBy}\nRegistered Date: ${data.registeredDate}\nChanged User ID: ${data.changedUserId}\nChanged By: ${data.changedBy}\nChanged Date: ${data.changedDate}`;
+        const urlSienge = `http://localhost:3000/api/bills/${billId}`;
+        const response = await fetch(urlSienge);
 
-        // Copie para a área de transferência
-        navigator.clipboard.writeText(textoFormatado);
+        if (!response.ok) {
+          throw new Error('Erro na chamada da API Sienge: ' + response.status);
+        }
 
-        alert('
+        const data = await response.json();
+        console.log('Dados da API do Sienge:', data);
+
+        // Adicione aqui a lógica para manipular os dados da API Sienge
+        enviarParaMilvus(data, email, motivo);
+
+        // Exibindo o resultado na página (você pode ajustar conforme necessário)
+        const resultadoElemento = document.getElementById('resultado');
+        resultadoElemento.innerHTML = formatarResultado(data);
+
+      } catch (error) {
+        console.error('Erro na chamada da API Sienge:', error);
+      }
+    }
+
+    function formatarResultado(data) {
+      let html = '<pre>';
+      for (const key in data) {
+        html += `<div><strong>${key}:</strong> ${data[key]} <button onclick="copiarValor('${data[key]}')">Copiar</button></div>`;
+      }
+      html += '</pre>';
+      return html;
+    }
+
+    function copiarValor(valor) {
+      try {
+        navigator.clipboard.writeText(valor);
+        alert('Valor copiado para a área de transferência!');
+      } catch (error) {
+        console.error('Erro ao copiar o valor:', error);
+      }
+    }
+
+    async function enviarParaMilvus(data, email, motivo) {
+      try {
+        // ... (seguindo a lógica da função anterior)
+      } catch (error) {
+        console.error('Erro na chamada da API Milvus:', error);
+      }
+    }
+  </script>
+
+</body>
+</html>
