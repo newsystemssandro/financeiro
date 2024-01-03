@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lançamentos de Títulos Financeiros EBM</title>
+  <title>Lançamentos de Títulos Financeiros</title>
 
   <style>
     h1 {
       text-transform: uppercase;
       text-align: center;
-      font-size: 40px;
+      font-size: 30px;
       color: #001F43; /* Cor da fonte em hex */
       margin-top: 20px; /* Espaçamento superior */
     }
@@ -50,11 +50,24 @@
     th, td {
       padding: 10px; /* Adiciona espaçamento interno nas células */
     }
+
+    /* Adicione estilos para a logo */
+    #logo {
+      display: block;
+      margin: 0 auto; /* Centraliza a logo */
+      max-width: 100%; /* Garante que a logo não ultrapasse a largura da tela */
+      height: auto; /* Mantém a proporção da altura da logo */
+      float: right; /* Posiciona a logo à direita */
+      margin-left: 20px; /* Adiciona espaço entre o texto e a logo */
+    }
   </style>
 </head>
 <body>
 
   <h1>Lançamentos de Títulos Financeiros</h1>
+
+  <!-- Adicione a logo à direita do título -->
+  <img id="logo" src="https://uploaddeimagens.com.br/imagens/HiukkW8" alt="Logo da Empresa">
 
   <form>
     <label for="billId">Escreva aqui o número do título do Sienge:</label>
@@ -106,24 +119,3 @@
               <td>${data.notes} <button onclick="copiarTexto('${data.notes}')">Copiar</button></td>
               <td>${data.discount} <button onclick="copiarTexto('${data.discount}')">Copiar</button></td>
               <td>${data.totalInvoiceAmount} <button onclick="copiarTexto('${data.totalInvoiceAmount}')">Copiar</button></td>
-            </tr>
-          </table>`;
-
-      } catch (error) {
-        console.error('Erro na chamada da API Sienge:', error);
-      }
-    }
-
-    // Função para copiar texto para a área de transferência
-    function copiarTexto(texto) {
-      const textarea = document.createElement('textarea');
-      textarea.value = texto;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-    }
-  </script>
-
-</body>
-</html>
