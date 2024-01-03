@@ -117,3 +117,22 @@
               <td>${data.notes} <button onclick="copiarTexto('${data.notes}')">Copiar</button></td>
               <td>${data.discount} <button onclick="copiarTexto('${data.discount}')">Copiar</button></td>
               <td>${data.totalInvoiceAmount} <button onclick="copiarTexto('${data.totalInvoiceAmount}')">Copiar</button></td>
+            </tr>
+          </table>`;
+      } catch (error) {
+        console.error('Erro na chamada da API Sienge:', error);
+      }
+    }
+
+    // Função para copiar texto para a área de transferência
+    function copiarTexto(texto) {
+      const textarea = document.createElement('textarea');
+      textarea.value = texto;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+  </script>
+</body>
+</html>
