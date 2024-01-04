@@ -85,7 +85,7 @@
       try {
         const billId = document.getElementById('billId').value;
 
-        const urlSienge = `http://localhost:3000/api/bills/${billId}`;
+        const urlSienge = `http://192.168.25.74:3000/api/bills/${billId}`;
         const response = await fetch(urlSienge);
 
         if (!response.ok) {
