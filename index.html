@@ -1,141 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lançamentos de Títulos Financeiros</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lançamentos de Títulos Financeiros</title>
 
-  <style>
-    h1 {
-      text-transform: uppercase;
-      text-align: center;
-      font-size: 30px;
-      color: #001F43; /* Cor da fonte em hex */
-      margin-top: 20px; /* Espaçamento superior */
-    }
-
-    label {
-      text-transform: uppercase;
-      text-align: center;
-      font-size: 30px;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    #billId {
-      text-transform: uppercase;
-      font-size: 30px;
-      display: block;
-      margin: 0 auto 10px; /* Centraliza o campo de entrada */
-    }
-
-    button {
-      text-transform: uppercase;
-      font-size: 30px;
-      display: block;
-      margin: 0 auto 20px; /* Centraliza o botão */
-    }
-
-    table {
-      width: 80%; /* Define a largura da tabela */
-      margin: 0 auto; /* Centraliza a tabela */
-      text-align: center; /* Centraliza o conteúdo das células */
-      border-collapse: collapse; /* Remove espaçamento entre as bordas das células */
-    }
-
-    table, th, td {
-      border: 1px solid black; /* Adiciona bordas às células */
-    }
-
-    th, td {
-      padding: 10px; /* Adiciona espaçamento interno nas células */
-    }
-
-    /* Adicione estilos para a logo */
-    #logo {
-      display: block;
-      margin: 20px 0 0 20px; /* Posiciona a logo à esquerda, no topo */
-      max-width: 100%; /* Garante que a logo não ultrapasse a largura da tela */
-      height: auto; /* Mantém a proporção da altura da logo */
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Adicione a logo à esquerda, no topo da página -->
-  <img id="logo" src="https://i.ibb.co/dW9jLz2/logo.png" alt="Logo da Empresa">
-
-  <h1>Lançamentos de Títulos Financeiros</h1>
-
-  <form>
-    <label for="billId">Escreva aqui o número do título do Sienge:</label>
-    <input type="text" id="billId" name="billId" required>
-
-    <button type="button" onclick="buscarTituloNoSienge()">Buscar Título no Sienge</button>
-  </form>
-
-  <div id="resultado"></div>
-
-  <!-- Adicione o iframe abaixo onde desejar -->
-  <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9a9ff00b0c943c05eabe3378399f661d90e9b5a524aedec7b2ed14b4bccc28d4c7fb"></iframe>
-
-  <script>
-    // Função para buscar título no Sienge
-    async function buscarTituloNoSienge() {
-      try {
-        const billId = document.getElementById('billId').value;
-
-        const urlSienge = `https://154.38.171.188:3000/api/bills/${billId}`;
-
-
-
-        const response = await fetch(urlSienge);
-
-        if (!response.ok) {
-          throw new Error('Erro na chamada da API Sienge: ' + response.status);
+    <style>
+        h1 {
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 30px;
+            color: #001F43; /* Cor da fonte em hex */
+            margin-top: 20px; /* Espaçamento superior */
         }
 
-        const data = await response.json();
-        console.log('Dados da API do Sienge:', data);
+        label {
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 30px;
+            display: block;
+            margin-bottom: 8px;
+        }
 
-        // Adicione aqui a lógica para manipular os dados da API Sienge
-        // (por exemplo, exibindo na página)
+        #billId {
+            text-transform: uppercase;
+            font-size: 30px;
+            display: block;
+            margin: 0 auto 10px; /* Centraliza o campo de entrada */
+        }
 
-        // Exibindo o resultado na página (você pode ajustar conforme necessário)
-        const resultadoElemento = document.getElementById('resultado');
-        resultadoElemento.innerHTML = `
-          <table border="1">
-            <tr>
-              <th>Título</th>
-              <th>Código da Empresa</th>
-              <th>Data de Vencimento</th>
-              <th>Observação</th>
-              <th>Desconto</th>
-              <th>Total do Título</th>
-            </tr>
-            <tr>
-              <td>${data.id} <button onclick="copiarTexto('${data.id}')">Copiar</button></td>
-              <td>${data.debtorId} <button onclick="copiarTexto('${data.debtorId}')">Copiar</button></td>
-              <td>${data.issueDate} <button onclick="copiarTexto('${data.issueDate}')">Copiar</button></td>
-              <td>${data.notes} <button onclick="copiarTexto('${data.notes}')">Copiar</button></td>
-              <td>${data.discount} <button onclick="copiarTexto('${data.discount}')">Copiar</button></td>
-              <td>${data.totalInvoiceAmount} <button onclick="copiarTexto('${data.totalInvoiceAmount}')">Copiar</button></td>
-            </tr>
-          </table>`;
-      } catch (error) {
-        console.error('Erro na chamada da API Sienge:', error);
-      }
-    }
+        button {
+            text-transform: uppercase;
+            font-size: 30px;
+            display: block;
+            margin: 0 auto 20px; /* Centraliza o botão */
+        }
 
-    // Função para copiar texto para a área de transferência
-    function copiarTexto(texto) {
-      const textarea = document.createElement('textarea');
-      textarea.value = texto;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-    }
-  </script>
+        table {
+            width: 80%; /* Define a largura da tabela */
+            margin: 0 auto; /* Centraliza a tabela */
+            text-align: center; /* Centraliza o conteúdo das células */
+            border-collapse: collapse; /* Remove espaçamento entre as bordas das células */
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black; /* Adiciona bordas às células */
+        }
+
+        th,
+        td {
+            padding: 10px; /* Adiciona espaçamento interno nas células */
+        }
+
+        /* Adicione estilos para a logo */
+        #logo {
+            display: block;
+            margin: 20px 0 0 20px; /* Posiciona a logo à esquerda, no topo */
+            max-width: 100%; /* Garante que a logo não ultrapasse a largura da tela */
+            height: auto; /* Mantém a proporção da altura da logo */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Adicione a logo à esquerda, no topo da página -->
+    <img id="logo" src="https://i.ibb.co/dW9jLz2/logo.png" alt="Logo da Empresa">
+
+    <h1>Lançamentos de Títulos Financeiros</h1>
+
+    <form>
+        <label for="billId">Escreva aqui o número do título do Sienge:</label>
+        <input type="text" id="billId" name="billId" required>
+
+        <button type="button" onclick="buscarTituloNoSienge()">Buscar Título no Sienge</button>
+    </form>
+
+    <div id="resultado"></div>
+
+    <!-- Adicione o iframe abaixo onde desejar -->
+    <iframe width="100%" height="1305px" frameBorder="0" src="https://formulario-ticket.milvus.com.br/home/e9d41bd4413eba979fc29cd43d40042c176302208c222a05f2e245e7e1da7a180db5b5abb1988fea3555133b4b8a3995b6be34881d9a9ff00b0c943c05eabe3378399f661d90e9b5a524aedec7b2ed14b4bccc28d4c7fb"></iframe>
+
+    <script>
+        // Função para buscar título no Sienge
+        async function buscarTituloNoSienge() {
+            try {
+                const billId = document.getElementById('billId').value;
+
+                const urlSienge = `https://154.38.171.188:3000/api/bills/${billId}`;
+                const response = await fetch(urlSienge);
+
+                if (!response.ok) {
+                    throw new Error('Erro na chamada da API Sienge: ' + response.status);
+                }
+
+                const data = await response.json();
+                console.log('Dados da API do Sienge:', data);
+
+                // Adicione aqui a lógica para manipular os dados da API Sienge
+                // (por exemplo, exibindo na página)
+
+                // Exibindo o resultado na página (você pode ajustar conforme necessário)
+                const resultadoElemento = document.getElementById('resultado');
+                resultadoElemento.innerHTML = `
+                  <table border="1">
+                    <tr>
+                      <th>Título</th>
+                      <th>Código da Empresa</th>
+                      <th>Data de Vencimento</th>
+                      <th>Observação</th>
+                      <th>Desconto</th>
+                      <th>Total do Título</th>
+                    </tr>
+                    <tr>
+                      <td>${data.id} <button onclick="copiarTexto('${data.id}')">Copiar</button></td>
+                      <td>${data.debtorId} <button onclick="copiarTexto('${data.debtorId}')">Copiar</button></td>
+                      <td>${data.issueDate} <button onclick="copiarTexto('${data.issueDate}')">Copiar</button></td>
+                      <td>${data.notes} <button onclick="copiarTexto('${data.notes}')">Copiar</button></td>
+                      <td>${data.discount} <button onclick="copiarTexto('${data.discount}')">Copiar</button></td>
+                      <td>${data.totalInvoiceAmount} <button onclick="copiarTexto('${data.totalInvoiceAmount}')">Copiar</button></td>
+                    </tr>
+                  </table>`;
+            } catch (error) {
+                console.error('Erro na chamada da API Sienge:', error);
+            }
+        }
+
+        // Função para copiar texto para a área de transferência
+        function copiarTexto(texto) {
+            const textarea = document.createElement('textarea');
+            textarea.value = texto;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+    </script>
 </body>
+
 </html>
